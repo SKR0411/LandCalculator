@@ -6,10 +6,10 @@
   <title>Land Calculator — History</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body data-page="history">
+<body data-page="history" class="ultra-vibrant">
   <header class="topbar">
     <div class="container topbar-inner">
-      <h1 class="brand">Land Calculator</h1>
+      <h1 class="brand">Land Calculator <span class="badge">Lite</span></h1>
       <nav class="nav">
         <a href="land_calculator_lite.html" class="nav-link">Calculator</a>
         <a href="result.html" class="nav-link">Result</a>
@@ -19,24 +19,20 @@
   </header>
 
   <main class="container">
-    <section class="card">
+    <section class="card glass card--padded">
       <div class="row" style="justify-content:space-between;align-items:center;">
         <h2>Saved Calculations</h2>
         <div>
-          <button id="exportBtn" class="btn outline">Export JSON</button>
-          <button id="clearHistoryBtn" class="btn ghost">Clear History</button>
+          <button id="exportBtn" class="btn btn--outline">Export JSON</button>
+          <button id="clearHistoryBtn" class="btn btn--ghost">Clear</button>
         </div>
       </div>
 
-      <div id="historyList" class="history-list">
+      <div id="historyList" class="history-list" style="margin-top:12px;">
         <!-- entries appended here -->
       </div>
     </section>
   </main>
-
-  <footer class="footer">
-    <div class="container muted small">History stored in your browser (localStorage)</div>
-  </footer>
 
   <div id="modal" class="modal" style="display:none;">
     <div class="modal-card">
@@ -45,11 +41,13 @@
     </div>
   </div>
 
+  <footer class="footer">
+    <div class="container muted small">History stored in your browser (localStorage)</div>
+  </footer>
+
   <div id="toast" class="toast" style="display:none;"></div>
 
   <script src="script.js"></script>
-  <script>
-    pageInit_history();
-  </script>
+  <script>pageInit_history()</script>
 </body>
 </html>

@@ -1,26 +1,21 @@
-// Shared logic for all pages (index / result / history)
-// Place this in script.js and ensure the three HTML pages include it.
-
+// script.js - shared logic (unchanged calculation logic, adapted for Ultra-Vibrant UI)
 (() => {
-  // --- Units used (copied/derived from original Android app) ---
   const lengthUnits = ["Meter","Centimeter","Foot","Inch","Nol","Haat"];
   const areaUnits = ["Square Meter","Square Centimeter","Square Foot","Square Inch","Hectare","Acre","Bigha","Kear","Josti","Raak","Fon","Kear_Josti_Raak_Fon","Kata"];
 
-  // Utility: DOM helpers
-  const $ = sel => document.querySelector(sel);
-  const $$ = sel => Array.from(document.querySelectorAll(sel));
+  const $ = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
 
-  // Toast
-  function showToast(msg, time=1800){
+  function showToast(msg, time=1600){
     const t = document.getElementById('toast');
     if(!t) return;
     t.textContent = msg;
+    t.classList.add('show');
     t.style.display = 'block';
     clearTimeout(t._to);
-    t._to = setTimeout(()=> t.style.display='none', time);
+    t._to = setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=> t.style.display='none',220); }, time);
   }
 
-  // Conversion: convert a length value (value+unit) to meters
   function lengthToMeters(v, unit){
     v = Number(v) || 0;
     switch(unit){
@@ -28,13 +23,12 @@
       case 'Centimeter': return v * 0.01;
       case 'Foot': return v * 0.3048;
       case 'Inch': return v * 0.0254;
-      case 'Nol': return v * 3.6576; // 12 ft? preserved from earlier
+      case 'Nol': return v * 3.6576;
       case 'Haat': return v * 0.4572;
       default: return v;
     }
   }
 
-  // Represent area in requested area unit (string)
   function formatArea(squareMeters, areaUnit){
     const m2 = squareMeters;
     switch(areaUnit){
@@ -50,7 +44,6 @@
       case 'Raak': return `${(m2/(0.4572*0.4572*8*8)).toFixed(3)} raak`;
       case 'Fon': return `${(m2/(0.4572*0.4572)).toFixed(2)} fon`;
       case 'Kear_Josti_Raak_Fon': {
-        // Provide composite breakdown (approximate)
         const kearArea = (0.4572*0.4572*8*8*4*28);
         const jostiArea = (0.4572*0.4572*8*8*4);
         const raakArea = (0.4572*0.4572*8*8);
@@ -67,12 +60,10 @@
     }
   }
 
-  // Price calculation
   function calcAmount(squareMeters, multiplier, rate, rateAreaUnit){
-    const areaUnit = rateAreaUnit;
     const op = Number(multiplier) || 0;
     const pr = Number(rate) || 0;
-    switch(areaUnit){
+    switch(rateAreaUnit){
       case 'Square Meter': return `${(op * pr * squareMeters).toFixed(2)} (₹) for ${(op * squareMeters).toFixed(2)} m²`;
       case 'Square Centimeter': return `${(op * pr * squareMeters * 10000).toFixed(2)} (₹) for ${(op * squareMeters * 10000).toFixed(1)} cm²`;
       case 'Square Foot': return `${(op * pr * squareMeters * 10.7639).toFixed(2)} (₹) for ${(op * squareMeters * 10.7639).toFixed(2)} ft²`;
@@ -84,44 +75,28 @@
     }
   }
 
-  // Storage helpers
   const HISTORY_KEY = 'landCalculatorHistory_v1';
   const SPINNER_KEY = 'landCalculatorSpinner_v1';
   const LAST_RESULT = 'landCalculatorLastResult_v1';
 
-  function saveSpinnerState(state){
-    localStorage.setItem(SPINNER_KEY, JSON.stringify(state));
-  }
-  function loadSpinnerState(){
-    try{ return JSON.parse(localStorage.getItem(SPINNER_KEY) || '{}'); } catch(e){ return {}; }
-  }
+  function saveSpinnerState(state){ localStorage.setItem(SPINNER_KEY, JSON.stringify(state)); }
+  function loadSpinnerState(){ try{ return JSON.parse(localStorage.getItem(SPINNER_KEY) || '{}'); }catch(e){return {};} }
+  function pushHistory(entry){ const arr = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); arr.unshift(entry); localStorage.setItem(HISTORY_KEY, JSON.stringify(arr)); }
+  function readHistory(){ return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
 
-  function pushHistory(entry){
-    const arr = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
-    arr.unshift(entry);
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(arr));
-  }
-
-  function readHistory(){
-    return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
-  }
-
-  // Page initializers
+  // INDEX page
   window.pageInit_index = function(){
-    // populate selects
     const mapSel = (sel, arr) => {
       const el = document.getElementById(sel);
       if(!el) return;
       el.innerHTML = arr.map(x => `<option value="${x}">${x}</option>`).join('');
     };
-
     mapSel('lengthAUnit', lengthUnits);
     mapSel('lengthBUnit', lengthUnits);
     mapSel('breadthAUnit', lengthUnits);
     mapSel('breadthBUnit', lengthUnits);
     mapSel('rateAreaUnit', areaUnits);
 
-    // load spinner state
     const st = loadSpinnerState();
     ['lengthAUnit','lengthBUnit','breadthAUnit','breadthBUnit','rateAreaUnit'].forEach(k=>{
       if(st[k]) {
@@ -134,9 +109,9 @@
     const clearBtn = document.getElementById('clearBtn');
     const goHistory = document.getElementById('goHistory');
     const preview = document.getElementById('preview');
+    const fabTop = document.getElementById('fabTop');
 
     calcBtn.addEventListener('click', ()=> {
-      // read inputs
       const lengthA = document.getElementById('lengthA').value;
       const lengthB = document.getElementById('lengthB').value;
       const breadthA = document.getElementById('breadthA').value;
@@ -151,22 +126,19 @@
 
       if([lengthA,lengthB,breadthA,breadthB].some(v => v === '' || isNaN(v))){
         showToast('Enter valid numbers for lengths and breadths.');
-        preview.value = '⚠ Please fill valid numeric inputs for all length and breadth fields.';
+        preview.value = '⚠ Please fill numeric inputs for all length and breadth fields.';
         return;
       }
 
-      // calculate meters
       const lMeters = lengthToMeters(lengthA, lengthAUnit) + lengthToMeters(lengthB, lengthBUnit);
       const bMeters = lengthToMeters(breadthA, breadthAUnit) + lengthToMeters(breadthB, breadthBUnit);
       const areaM2 = lMeters * bMeters;
 
-      const areaFormatted = formatArea(areaM2, 'Square Meter'); // default display unit on index preview: m²
+      const areaFormatted = formatArea(areaM2, 'Square Meter');
       const areaInUnit = formatArea(areaM2, rateAreaUnit);
       const amountFormatted = calcAmount(areaM2, multiplier, rate, rateAreaUnit);
-
       const now = new Date().toLocaleString();
 
-      // create result bundle to transfer to result page via sessionStorage
       const bundle = {
         length: {a: lengthA, aUnit: lengthAUnit, b: lengthB, bUnit: lengthBUnit},
         breadth: {a: breadthA, aUnit: breadthAUnit, b: breadthB, bUnit: breadthBUnit},
@@ -179,18 +151,15 @@
       };
 
       sessionStorage.setItem(LAST_RESULT, JSON.stringify(bundle));
-
-      // save spinner state
       saveSpinnerState({
         lengthAUnit:lengthAUnit, lengthBUnit:lengthBUnit,
         breadthAUnit:breadthAUnit, breadthBUnit:breadthBUnit,
         rateAreaUnit:rateAreaUnit
       });
 
-      // preview and navigate the user to result page
-      preview.value = `Area (m²): ${areaM2.toFixed(3)}\nArea (${rateAreaUnit}): ${areaInUnit}\nAmount: ${amountFormatted}\n\nTap 'Result' in the top menu or click 'Open Result' to continue.`;
-      showToast('Calculated — opening result page...');
-      setTimeout(()=> location.href = 'result.html', 600);
+      preview.value = `Area (m²): ${areaM2.toFixed(3)}\nArea (${rateAreaUnit}): ${areaInUnit}\nAmount: ${amountFormatted}\n\nOpening result page...`;
+      showToast('Calculated — opening result');
+      setTimeout(()=> location.href = 'result.html', 650);
     });
 
     clearBtn.addEventListener('click', ()=> {
@@ -200,9 +169,17 @@
     });
 
     goHistory.addEventListener('click', ()=> location.href = 'history.html');
+    if(fabTop){
+      fabTop.addEventListener('click', ()=> {
+        ['lengthA','lengthB','breadthA','breadthB','multiplier','rate'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+        preview.value = '';
+        showToast('Ready for new calculation');
+        window.scrollTo({top:0, behavior:'smooth'});
+      });
+    }
   };
 
-  // result page initializer
+  // RESULT page
   window.pageInit_result = function(){
     const container = document.getElementById('resultSummary');
     const saveBtn = document.getElementById('saveToHistory');
@@ -212,7 +189,7 @@
     const raw = sessionStorage.getItem(LAST_RESULT);
     if(!raw){
       container.innerHTML = `<div class="muted">No recent calculation found. Go to Calculator and compute first.</div>`;
-      saveBtn.disabled = true;
+      if(saveBtn) saveBtn.disabled = true;
       return;
     }
     const bundle = JSON.parse(raw);
@@ -222,17 +199,17 @@
         <div class="row" style="gap:18px;align-items:flex-start;">
           <div style="flex:1">
             <div class="muted">Computed at</div>
-            <div style="font-weight:700;margin-bottom:8px">${b.computedAt}</div>
+            <div style="font-weight:700;margin-bottom:8px;color:var(--text-1)">${b.computedAt}</div>
 
             <div class="muted">Length</div>
-            <div>${b.length.a} ${b.length.aUnit} + ${b.length.b} ${b.length.bUnit}</div>
+            <div style="margin-bottom:8px">${b.length.a} ${b.length.aUnit} + ${b.length.b} ${b.length.bUnit}</div>
 
-            <div class="muted" style="margin-top:8px">Breadth</div>
+            <div class="muted">Breadth</div>
             <div>${b.breadth.a} ${b.breadth.aUnit} + ${b.breadth.b} ${b.breadth.bUnit}</div>
           </div>
-          <div style="width:260px">
+          <div style="width:300px">
             <div class="muted">Area (m²)</div>
-            <div style="font-weight:800;font-size:18px;margin-bottom:8px">${b.areaMeters.toFixed(3)} m²</div>
+            <div style="font-weight:800;font-size:20px;margin-bottom:8px;color:var(--text-1)">${b.areaMeters.toFixed(3)} m²</div>
 
             <div class="muted">Area (${b.rateAreaUnit})</div>
             <div style="font-weight:700;margin-bottom:8px">${b.areaInRateUnit}</div>
@@ -246,20 +223,18 @@
 
     container.innerHTML = renderBundle(bundle);
 
-    saveBtn.addEventListener('click', ()=>{
-      const historyEntry = {
-        ...bundle,
-        savedAt: new Date().toLocaleString()
-      };
-      pushHistory(historyEntry);
-      showToast('Saved to history');
-    });
-
-    backBtn.addEventListener('click', ()=> location.href = 'index.html');
-    openHistory.addEventListener('click', ()=> location.href = 'history.html');
+    if(saveBtn){
+      saveBtn.addEventListener('click', ()=>{
+        const historyEntry = {...bundle, savedAt: new Date().toLocaleString()};
+        pushHistory(historyEntry);
+        showToast('Saved to history');
+      });
+    }
+    if(backBtn) backBtn.addEventListener('click', ()=> location.href = 'land_calculator_lite.html');
+    if(openHistory) openHistory.addEventListener('click', ()=> location.href = 'history.html');
   };
 
-  // history page initializer
+  // HISTORY page
   window.pageInit_history = function(){
     const listEl = document.getElementById('historyList');
     const clearBtn = document.getElementById('clearHistoryBtn');
@@ -271,28 +246,25 @@
     function render(){
       const arr = readHistory();
       listEl.innerHTML = '';
-      if(arr.length === 0){
-        listEl.innerHTML = `<div class="muted">No saved calculations yet.</div>`;
-        return;
-      }
+      if(arr.length === 0){ listEl.innerHTML = `<div class="muted">No saved calculations yet.</div>`; return; }
       arr.forEach((h, idx) => {
         const el = document.createElement('div');
         el.className = 'history-item';
         el.innerHTML = `
           <div style="flex:1">
-            <div style="font-weight:700">${h.computedAt} • ${h.savedAt || 'saved'}</div>
-            <div class="meta">L: ${h.length.a} ${h.length.aUnit} + ${h.length.b} ${h.length.bUnit} • B: ${h.breadth.a} ${h.breadth.aUnit} + ${h.breadth.b} ${h.breadth.bUnit}</div>
+            <div style="font-weight:700;color:var(--text-1)">${h.computedAt} • ${h.savedAt || 'saved'}</div>
+            <div class="meta">L: ${h.length.a} ${h.length.aUnit} + ${h.length.b} ${h.length.bUnit}</div>
+            <div class="meta">B: ${h.breadth.a} ${h.breadth.aUnit} + ${h.breadth.b} ${h.breadth.bUnit}</div>
             <div class="meta">Area: ${formatArea(h.areaMeters, 'Square Meter')} • Price unit: ${h.rateAreaUnit}</div>
           </div>
           <div class="actions">
-            <button class="btn outline view" data-idx="${idx}">View</button>
-            <button class="btn ghost del" data-idx="${idx}">Delete</button>
+            <button class="btn btn--outline view" data-idx="${idx}">View</button>
+            <button class="btn btn--ghost del" data-idx="${idx}">Delete</button>
           </div>
         `;
         listEl.appendChild(el);
       });
 
-      // attach events
       $$('.history-item .view').forEach(btn => btn.addEventListener('click', e => {
         const idx = Number(e.currentTarget.dataset.idx);
         const arr = readHistory();
@@ -314,7 +286,7 @@
 
     render();
 
-    clearBtn.addEventListener('click', ()=>{
+    if(clearBtn) clearBtn.addEventListener('click', ()=>{
       if(confirm('Clear all history?')){
         localStorage.removeItem(HISTORY_KEY);
         render();
@@ -322,7 +294,7 @@
       }
     });
 
-    exportBtn.addEventListener('click', ()=>{
+    if(exportBtn) exportBtn.addEventListener('click', ()=>{
       const arr = readHistory();
       const blob = new Blob([JSON.stringify(arr, null, 2)], {type:'application/json'});
       const url = URL.createObjectURL(blob);
@@ -342,7 +314,7 @@
     }
   };
 
-  // Expose some helpers globally for pages
+  // expose helpers globally
   window.formatArea = formatArea;
   window.calcAmount = calcAmount;
   window.pushHistory = pushHistory;
