@@ -1,336 +1,89 @@
 <!doctype html>
-
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Area Calculator (Web)</title>
-  <style>
-    :root{--accent:#6200ee;--danger:#ee0055;--muted:#eee}
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;margin:0;background:#FAFAFA;color:#111}
-    .container{max-width:880px;margin:18px auto;padding:18px}
-    h1{font-size:22px;margin:6px 0}
-    label{display:block;margin-top:12px;font-weight:600}
-    .grid{display:flex;gap:12px;flex-wrap:wrap}
-    .col{flex:1;min-width:150px}
-    input[type=number],select{width:100%;box-sizing:border-box;padding:8px;border:1px solid #ccc;border-radius:6px}
-    textarea#tvResult{width:100%;height:120px;padding:10px;border-radius:6px;border:1px solid #ddd;background:#f5f5f5;resize:vertical}
-    .row{display:flex;gap:10px}
-    button{padding:10px 12px;border:0;border-radius:8px;background:var(--accent);color:#fff;cursor:pointer}
-    .btn-danger{background:var(--danger)}
-    .btn-muted{background:#697;color:#fff}
-    .small{font-size:13px;color:#666}
-    .controls{display:flex;gap:10px;margin-top:12px}
-    .history-list{background:#fff;border:1px solid #eee;padding:12px;border-radius:8px;max-height:360px;overflow:auto}
-    .history-item{border-bottom:1px dashed #eee;padding:8px 0}
-    .muted{color:#666}
-    .toast{position:fixed;right:18px;bottom:18px;background:#333;color:#fff;padding:8px 12px;border-radius:8px;opacity:0.95}
-    .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.35)}
-    .card{background:#fff;padding:18px;border-radius:10px;max-width:720px;width:94%;box-shadow:0 8px 30px rgba(0,0,0,0.12)}
-    @media(max-width:640px){.grid{flex-direction:column}}
-  </style>
+  <title>Land Calculator — Main</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <div class="container">
-    <h1>Area Calculator</h1><label>Result</label>
-<textarea id="tvResult" readonly></textarea>
-
-<label>Length</label>
-<div class="grid">
-  <div class="col">
-    <input id="edtLength1" type="number" placeholder="Enter length" step="any" />
-    <select id="spinnerLengthUnit1"></select>
-  </div>
-  <div class="col">
-    <input id="edtLength2" type="number" placeholder="Enter length" step="any" />
-    <select id="spinnerLengthUnit2"></select>
-  </div>
-</div>
-
-<label>Breadth</label>
-<div class="grid">
-  <div class="col">
-    <input id="edtBreadth1" type="number" placeholder="Enter breadth" step="any" />
-    <select id="spinnerBreadthUnit1"></select>
-  </div>
-  <div class="col">
-    <input id="edtBreadth2" type="number" placeholder="Enter breadth" step="any" />
-    <select id="spinnerBreadthUnit2"></select>
-  </div>
-</div>
-
-<label>Amount / Price</label>
-<div class="grid">
-  <div class="col">
-    <input id="edtOperator" type="number" placeholder="Operator (times)" step="any" />
-    <select id="spinnerOperator"><option>Times</option></select>
-  </div>
-  <div class="col">
-    <input id="edtPrice" type="number" placeholder="Rate" step="any" />
-    <select id="spinnerAreaUnitForPrice"></select>
-  </div>
-</div>
-
-<div style="margin-top:8px">
-  <select id="spinnerAreaUnit"></select>
-</div>
-
-<div class="controls">
-  <button id="btnCalculate">Calculate</button>
-  <button id="btnClear" class="btn-danger">Clear All</button>
-  <button id="btnHistoryView" class="btn-muted">History</button>
-</div>
-
-<h2 style="margin-top:18px">History</h2>
-<div class="history-list" id="historyList"></div>
-
-  </div>  <!-- modal for result details -->  <div id="modal" style="display:none" class="modal" aria-hidden="true">
-    <div class="card">
-      <h3>Result Details</h3>
-      <pre id="modalContent" style="white-space:pre-wrap;background:#fafafa;padding:12px;border-radius:6px"></pre>
-      <div style="text-align:right;margin-top:10px">
-        <button id="closeModal">Close</button>
-      </div>
+<body data-page="index">
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <h1 class="brand">Land Calculator</h1>
+      <nav class="nav">
+        <a href="land_calculator_lite.html" class="nav-link active">Calculator</a>
+        <a href="result.html" class="nav-link">Result</a>
+        <a href="history.html" class="nav-link">History</a>
+      </nav>
     </div>
-  </div>  <div id="toast" class="toast" style="display:none"></div>  <script>
-    // Units arrays copied from Android app
-    const arrLengthUnits = ["Meter","Centimeter","Foot","Inch","Nol","Haat"];
-    const arrAreaUnits = ["Square Meter","Square Centimeter","Square Foot","Square Inch","Hectare","Acre","Bigha","Kear","Josti","Raak","Fon","Kear_Josti_Raak_Fon","Kata"];
+  </header>
 
-    // DOM refs
-    const edtLength1 = document.getElementById('edtLength1');
-    const edtLength2 = document.getElementById('edtLength2');
-    const edtBreadth1 = document.getElementById('edtBreadth1');
-    const edtBreadth2 = document.getElementById('edtBreadth2');
-    const edtOperator = document.getElementById('edtOperator');
-    const edtPrice = document.getElementById('edtPrice');
+  <main class="container">
+    <section class="card">
+      <h2>Enter Dimensions</h2>
+      <p class="muted">Enter length and breadth as two-part inputs (e.g. meters + cm, or two components like 10 & 0).</p>
 
-    const spinnerLengthUnit1 = document.getElementById('spinnerLengthUnit1');
-    const spinnerLengthUnit2 = document.getElementById('spinnerLengthUnit2');
-    const spinnerBreadthUnit1 = document.getElementById('spinnerBreadthUnit1');
-    const spinnerBreadthUnit2 = document.getElementById('spinnerBreadthUnit2');
-    const spinnerAreaUnit = document.getElementById('spinnerAreaUnit');
-    const spinnerAreaUnitForPrice = document.getElementById('spinnerAreaUnitForPrice');
+      <div class="grid-2">
+        <div>
+          <label>Length — Part A</label>
+          <input id="lengthA" type="number" step="any" placeholder="e.g. 10" />
+          <select id="lengthAUnit" class="select"></select>
+        </div>
+        <div>
+          <label>Length — Part B</label>
+          <input id="lengthB" type="number" step="any" placeholder="e.g. 50" />
+          <select id="lengthBUnit" class="select"></select>
+        </div>
+      </div>
 
-    const btnCalculate = document.getElementById('btnCalculate');
-    const btnClear = document.getElementById('btnClear');
-    const btnHistoryView = document.getElementById('btnHistoryView');
-    const tvResult = document.getElementById('tvResult');
-    const historyList = document.getElementById('historyList');
+      <div class="grid-2">
+        <div>
+          <label>Breadth — Part A</label>
+          <input id="breadthA" type="number" step="any" placeholder="e.g. 5" />
+          <select id="breadthAUnit" class="select"></select>
+        </div>
+        <div>
+          <label>Breadth — Part B</label>
+          <input id="breadthB" type="number" step="any" placeholder="e.g. 20" />
+          <select id="breadthBUnit" class="select"></select>
+        </div>
+      </div>
 
-    const modal = document.getElementById('modal');
-    const modalContent = document.getElementById('modalContent');
-    const closeModal = document.getElementById('closeModal');
+      <div class="grid-2">
+        <div>
+          <label>Multiplier (Times)</label>
+          <input id="multiplier" type="number" step="any" placeholder="e.g. 1" />
+        </div>
+        <div>
+          <label>Rate / Price</label>
+          <input id="rate" type="number" step="any" placeholder="e.g. 1000" />
+          <select id="rateAreaUnit" class="select"></select>
+        </div>
+      </div>
 
-    const toastEl = document.getElementById('toast');
+      <div class="row gap">
+        <button id="calculateBtn" class="btn primary">Calculate</button>
+        <button id="clearBtn" class="btn ghost">Clear</button>
+        <button id="goHistory" class="btn outline">View History</button>
+      </div>
+    </section>
 
-    // init
-    function populateSelect(sel, arr){ sel.innerHTML = arr.map(a=>`<option>${a}</option>`).join('\n'); }
-    populateSelect(spinnerLengthUnit1, arrLengthUnits);
-    populateSelect(spinnerLengthUnit2, arrLengthUnits);
-    populateSelect(spinnerBreadthUnit1, arrLengthUnits);
-    populateSelect(spinnerBreadthUnit2, arrLengthUnits);
-    populateSelect(spinnerAreaUnit, arrAreaUnits);
-    populateSelect(spinnerAreaUnitForPrice, arrAreaUnits);
+    <section class="card">
+      <h2>Quick Preview</h2>
+      <textarea id="preview" class="preview" readonly placeholder="Results will appear after calculating..."></textarea>
+    </section>
+  </main>
 
-    // Load saved spinner status
-    const saved = JSON.parse(localStorage.getItem('SpinnerStatus')||'{}');
-    if(saved.lengthUnit1) spinnerLengthUnit1.value = saved.lengthUnit1;
-    if(saved.lengthUnit2) spinnerLengthUnit2.value = saved.lengthUnit2;
-    if(saved.breadthUnit1) spinnerBreadthUnit1.value = saved.breadthUnit1;
-    if(saved.breadthUnit2) spinnerBreadthUnit2.value = saved.breadthUnit2;
-    if(saved.areaUnit) spinnerAreaUnit.value = saved.areaUnit;
-    if(saved.areaUnitForPrice) spinnerAreaUnitForPrice.value = saved.areaUnitForPrice;
+  <footer class="footer">
+    <div class="container muted small">Modern blue-gray theme • Local-only (no server required)</div>
+  </footer>
 
-    function showToast(message){ toastEl.textContent = message; toastEl.style.display='block'; setTimeout(()=>toastEl.style.display='none',2200); }
+  <div id="toast" class="toast" style="display:none;"></div>
 
-    function convertToMeter(value, lengthUnit){
-      value = Number(value);
-      switch(lengthUnit){
-        case 'Meter': return value;
-        case 'Centimeter': return value * 0.01;
-        case 'Foot': return value * 0.3048;
-        case 'Inch': return value * 0.0254;
-        case 'Nol': return value * 3.6576;
-        case 'Haat': return value * 0.4572;
-        default: return value;
-      }
-    }
-
-    function resultArea(value, areaUnit){
-      switch(areaUnit){
-        case 'Square Meter': return `${value.toFixed(2)} m²`;
-        case 'Square Centimeter': return `${(value*10000).toFixed(1)} cm²`;
-        case 'Square Foot': return `${(value*10.7639).toFixed(2)} ft²`;
-        case 'Square Inch': return `${(value*1550.0031).toFixed(1)} In²`;
-        case 'Hectare': return `${(value/10000).toFixed(5)} Hectare`;
-        case 'Acre': return `${(value/4046.86).toFixed(5)} Acre`;
-        case 'Bigha': return `${(value/1600).toFixed(5)} Bigha`;
-        case 'Kear': return `${(value/(0.4572*0.4572*8*8*4*28)).toFixed(4)} Kear`;
-        case 'Josti': return `${(value/(0.4572*0.4572*8*8*4)).toFixed(3)} Josti`;
-        case 'Raak': return `${(value/(0.4572*0.4572*8*8)).toFixed(3)} Raak`;
-        case 'Fon': return `${(value/(0.4572*0.4572)).toFixed(2)} Fon`;
-        case 'Kear_Josti_Raak_Fon': {
-          if(value < 100000*100000) {
-            const k = Math.floor(value / (0.4572*0.4572*8*8*4*28));
-            const remK = (value / (0.4572*0.4572*8*8*4*28)) - k;
-            const j = Math.floor(remK * 28);
-            const remJ = (value / (0.4572*0.4572*8*8*4)) - Math.floor(value / (0.4572*0.4572*8*8*4));
-            const r = Math.floor(remJ * 4);
-            const fon = (((value / (0.4572*0.4572*8*8)) - Math.floor(value / (0.4572*0.4572*8*8))) * 8 * 8);
-            return `${k} Kear, ${j} Josti, ${r} Raak, ${fon.toFixed(2)} Fon`;
-          } else return 'Area is too big for this unit.';
-        }
-        default: return 'Select valid unit for area.';
-      }
-    }
-
-    function resultAmount(areaSm, operator, price, areaUnit){
-      switch(areaUnit){
-        case 'Square Meter': return `${(operator*areaSm*price).toFixed(2)} Rupees (${(operator*areaSm).toFixed(2)} m²)`;
-        case 'Square Centimeter': return `${(operator*price*areaSm*10000).toFixed(2)} Rupees (${(operator*areaSm*10000).toFixed(1)} cm²)`;
-        case 'Square Foot': return `${(operator*price*areaSm*10.7639).toFixed(2)} Rupees (${(operator*areaSm*10.7639).toFixed(2)} ft²)`;
-        case 'Square Inch': return `${(operator*price*areaSm*1550.0031).toFixed(2)} Rupees (${(operator*areaSm*1550.0031).toFixed(1)} In²)`;
-        case 'Hectare': return `${(operator*price*areaSm/10000).toFixed(2)} Rupees (${(operator*areaSm/10000).toFixed(5)} Hectare)`;
-        case 'Acre': return `${(operator*price*areaSm/4046.86).toFixed(2)} Rupees (${(operator*areaSm/4046.86).toFixed(5)} Acre)`;
-        case 'Bigha': return `${(operator*price*areaSm/1600).toFixed(2)} Rupees (${(operator*areaSm/1600).toFixed(5)} Bigha)`;
-        case 'Kear': return `${(operator*price*areaSm/(0.4572*0.4572*8*8*4*28)).toFixed(2)} Rupees (${(operator*areaSm/(0.4572*0.4572*8*8*4*28)).toFixed(4)} Kear)`;
-        case 'Josti': return `${(operator*price*areaSm/(0.4572*0.4572*8*8*4)).toFixed(2)} Rupees (${(operator*areaSm/(0.4572*0.4572*8*8*4)).toFixed(3)} Josti)`;
-        case 'Raak': return `${(operator*price*areaSm/(0.4572*0.4572*8*8)).toFixed(2)} Rupees (${(operator*areaSm/(0.4572*0.4572*8*8)).toFixed(3)} Raak)`;
-        case 'Fon': return `${(operator*price*areaSm/(0.4572*0.4572)).toFixed(2)} Rupees (${(operator*areaSm/(0.4572*0.4572)).toFixed(2)} Fon)`;
-        default: return 'Select valid unit for price.';
-      }
-    }
-
-    function saveSpinnerStatus(){
-      localStorage.setItem('SpinnerStatus', JSON.stringify({
-        lengthUnit1: spinnerLengthUnit1.value,
-        lengthUnit2: spinnerLengthUnit2.value,
-        breadthUnit1: spinnerBreadthUnit1.value,
-        breadthUnit2: spinnerBreadthUnit2.value,
-        areaUnit: spinnerAreaUnit.value,
-        areaUnitForPrice: spinnerAreaUnitForPrice.value
-      }));
-    }
-
-    function addHistory(entry){
-      const arr = JSON.parse(localStorage.getItem('LandHistory')||'[]');
-      arr.unshift(entry);
-      localStorage.setItem('LandHistory', JSON.stringify(arr));
-      renderHistory();
-    }
-
-    function renderHistory(){
-      const arr = JSON.parse(localStorage.getItem('LandHistory')||'[]');
-      historyList.innerHTML = '';
-      if(arr.length===0){ historyList.textContent = 'No History.'; return; }
-      arr.forEach((h, i)=>{
-        const div = document.createElement('div'); div.className='history-item';
-        div.innerHTML = `
-          <div class="muted">Time: ${h.currentDateAndTime}</div>
-          <div>Length: ${h.length1} ${h.lengthUnit1} ${h.length2} ${h.lengthUnit2}</div>
-          <div>Breadth: ${h.breadth1} ${h.breadthUnit1} ${h.breadth2} ${h.breadthUnit2}</div>
-          <div>Multiplier: ${h.multiplier} times</div>
-          <div>Price: ${h.price}/${h.areaUnitForPrice}</div>
-          <div>Area: ${h.areaAndUnit}</div>
-          <div>Amount: ${h.priceAndUnit}</div>
-          <div style="text-align:right;margin-top:6px"><button data-idx="${i}" class="viewBtn">Details</button></div>
-        `;
-        historyList.appendChild(div);
-      });
-      // attach events
-      document.querySelectorAll('.viewBtn').forEach(btn=>btn.addEventListener('click',e=>{
-        const idx = Number(e.currentTarget.dataset.idx);
-        const arr = JSON.parse(localStorage.getItem('LandHistory')||'[]');
-        const item = arr[idx];
-        modalContent.textContent = formatResultBundle(item);
-        modal.style.display='flex';
-      }));
-    }
-
-    function formatResultBundle(b){
-      return `Length: ${b.length1} ${b.lengthUnit1} ${b.length2} ${b.lengthUnit2}\nBreadth: ${b.breadth1} ${b.breadthUnit1} ${b.breadth2} ${b.breadthUnit2}\nMultiplier: ${b.multiplier} times\nPrice: ${b.price}/${b.areaUnitForPrice}\nArea: ${b.areaAndUnit}\nAmount: ${b.priceAndUnit}\nTime: ${b.currentDateAndTime}`;
-    }
-
-    btnCalculate.addEventListener('click', ()=>{
-      try{
-        const length1 = parseFloat(edtLength1.value);
-        const length2 = parseFloat(edtLength2.value);
-        const breadth1 = parseFloat(edtBreadth1.value);
-        const breadth2 = parseFloat(edtBreadth2.value);
-        const operator = parseFloat(edtOperator.value);
-        const price = parseFloat(edtPrice.value);
-        if([length1,length2,breadth1,breadth2,operator,price].some(v=>isNaN(v))){ throw 'Please enter valid numbers for length and breadth.' }
-
-        const lengthUnit1 = spinnerLengthUnit1.value;
-        const lengthUnit2 = spinnerLengthUnit2.value;
-        const breadthUnit1 = spinnerBreadthUnit1.value;
-        const breadthUnit2 = spinnerBreadthUnit2.value;
-        const areaUnit = spinnerAreaUnit.value;
-        const areaUnitForPrice = spinnerAreaUnitForPrice.value;
-
-        const currentDateAndTime = new Date().toLocaleString();
-
-        saveSpinnerStatus();
-
-        const lengthInMeters1 = convertToMeter(length1,lengthUnit1);
-        const lengthInMeters2 = convertToMeter(length2,lengthUnit2);
-        const breadthInMeters1 = convertToMeter(breadth1,breadthUnit1);
-        const breadthInMeters2 = convertToMeter(breadth2,breadthUnit2);
-
-        const lengthInMeters = lengthInMeters1 + lengthInMeters2;
-        const breadthInMeters = breadthInMeters1 + breadthInMeters2;
-
-        const areaSqMeter = lengthInMeters * breadthInMeters;
-
-        const resultAreaStr = resultArea(areaSqMeter, areaUnit);
-        const resultAmountStr = resultAmount(areaSqMeter, operator, price, areaUnitForPrice);
-
-        // Save history
-        const entry = { length1, lengthUnit1, length2, lengthUnit2, breadth1, breadthUnit1, breadth2, breadthUnit2, multiplier: operator, price, areaUnitForPrice, areaAndUnit: resultAreaStr, priceAndUnit: resultAmountStr, currentDateAndTime };
-        addHistory(entry);
-
-        // set tvResult
-        tvResult.value = `Total Area:\n${resultAreaStr}\n\nTotal Amount:\n${resultAmountStr}`;
-
-        showToast('Calculated');
-
-      } catch(err){
-        tvResult.value = '⚠ Please enter valid numbers for length and breadth.';
-        showToast('⚠ Please enter valid numbers for length and breadth.');
-      }
-    });
-
-    btnClear.addEventListener('click', ()=>{
-      edtLength1.value=''; edtLength2.value=''; edtBreadth1.value=''; edtBreadth2.value=''; edtOperator.value=''; edtPrice.value=''; tvResult.value='';
-      // clear bundle-like storage
-      showToast('Cleared.');
-    });
-
-    btnHistoryView.addEventListener('click', ()=>{
-      // scroll to history
-      historyList.scrollIntoView({behavior:'smooth'});
-    });
-
-    // modal
-    closeModal.addEventListener('click', ()=>{ modal.style.display='none'; });
-    modal.addEventListener('click', (e)=>{ if(e.target===modal) modal.style.display='none'; });
-
-    // context menu to clear history
-    const clearHistoryBtn = document.createElement('button'); clearHistoryBtn.textContent='Clear History'; clearHistoryBtn.style.marginLeft='8px'; clearHistoryBtn.onclick = ()=>{
-      if(confirm('Clear history?')){ localStorage.removeItem('LandHistory'); renderHistory(); showToast('History Cleared'); }
-    };
-    document.querySelector('.container h2').appendChild(clearHistoryBtn);
-
-    // initial render
-    renderHistory();
-
-    // clicking tvResult opens last result details (mimic Android behaviour)
-    tvResult.addEventListener('click', ()=>{
-      const arr = JSON.parse(localStorage.getItem('LandHistory')||'[]');
-      if(arr.length>0){ modalContent.textContent = formatResultBundle(arr[0]); modal.style.display='flex'; }
-      else { tvResult.value = '⚠ Please enter parameters and press calculate button.'; showToast('⚠ Please enter parameters and press calculate button.'); }
-    });
-
-  </script></body>
+  <script src="script.js"></script>
+  <script>
+    // page-specific init
+    pageInit_index();
+  </script>
+</body>
 </html>
