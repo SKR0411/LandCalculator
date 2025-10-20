@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Area Calculator</title>
+<title>Area Calculator (Lite)</title>
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -12,47 +12,13 @@
         max-width: 600px;
         margin: auto;
     }
-    h2 {
-        margin-top: 20px;
-        color: #000;
-    }
-    .row {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        margin-bottom: 15px;
-    }
-    .column {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-    input, select, button {
-        padding: 8px;
-        font-size: 16px;
-        width: 150px;
-    }
-    button {
-        width: 100%;
-        background: #FF6200EE;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-        padding: 10px;
-        font-size: 16px;
-    }
-    .result-box {
-        margin-top: 15px;
-        background: #EEEEEE;
-        padding: 10px;
-        font-size: 18px;
-        color: #333;
-        min-height: 50px;
-    }
-    .clear-btn {
-        background: #FFEE0055;
-        color: #fff;
-    }
+    h2 { margin-top: 20px; color: #000; }
+    .row { display: flex; justify-content: center; gap: 20px; margin-bottom: 15px; }
+    .column { display: flex; flex-direction: column; gap: 10px; }
+    input, select, button { padding: 8px; font-size: 16px; width: 150px; }
+    button { width: 100%; background: #FF6200EE; color: #fff; border: none; cursor: pointer; padding: 10px; font-size: 16px; }
+    .result-box { margin-top: 15px; background: #EEEEEE; padding: 10px; font-size: 18px; color: #333; min-height: 50px; }
+    .clear-btn { background: #FFEE0055; color: #fff; }
 </style>
 </head>
 <body>
@@ -91,8 +57,9 @@
 <div class="row">
     <div class="column">
         <label>Multiplier</label>
-        <input type="number" id="times" value="1" step="1">
-        <select id="multiplier"></select>
+        <input type="number" id="times" value="1" step="1" min="1" max="1">
+        <select id="multiplier" disabled></select>
+        <small style="color:red;">Advanced feature locked. Download app to unlock.</small>
     </div>
     <div class="column">
         <label>Enter Price</label>
@@ -110,9 +77,9 @@
 </div>
 
 <script>
-const units = ["Meter", "Centimeter", "Foot", "Inch", "Nol", "Haat"];
-const areaUnits = ["Square Meter", "Square Centimeter", "Square Foot", "Square Inch", "Hectare", "Acre", "Bigha", "Kear", "Josti", "Raak", "Fon", "Kear_Josti_Raak_Fon", "Kata"];
-const multiplier = ["1","2","3","4","5","6","7","8","9","10"];
+const units = ["Meter", "Centimeter", "Foot", "Inch"];
+const areaUnits = ["Square Meter", "Square Centimeter", "Square Foot", "Square Inch"]; // restricted
+const multiplier = ["1"]; // restricted
 
 // Populate dropdowns
 function populateDropdown(id, arr) {
@@ -136,8 +103,6 @@ function convertToMeter(value, unit) {
         case "Centimeter": return value * 0.01;
         case "Foot": return value * 0.3048;
         case "Inch": return value * 0.0254;
-        case "Nol": return value * 3.6576;
-        case "Haat": return value * 0.4572;
         default: return value;
     }
 }
@@ -171,10 +136,6 @@ function formatArea(value, unit) {
         case "Square Centimeter": return (value*10000).toFixed(1)+" cm²";
         case "Square Foot": return (value*10.7639).toFixed(2)+" ft²";
         case "Square Inch": return (value*1550.0031).toFixed(1)+" In²";
-        case "Hectare": return (value/10000).toFixed(5)+" Hectare";
-        case "Acre": return (value/4046.86).toFixed(5)+" Acre";
-        case "Bigha": return (value/1600).toFixed(5)+" Bigha";
-        case "Fon": return (value/(0.4572*0.4572)).toFixed(2)+" Fon";
         default: return "Select valid unit for area.";
     }
 }
@@ -185,14 +146,19 @@ function calculateAmount() {
     const price = parseFloat(document.getElementById("price").value) || 0;
     const priceUnit = document.getElementById("priceUnit").value;
 
+    if(times > 1){
+        alert("Multiplier greater than 1 is locked. Download app to unlock.");
+        return;
+    }
+
     const areaSqMeter = calculateArea();
-    let amount = areaSqMeter * times * price; // Default in selected unit
+    const amount = areaSqMeter * times * price;
     document.getElementById("amountResult").textContent = formatArea(areaSqMeter, priceUnit)+"\n"+amount.toFixed(2)+" Rupees";
 }
 
 // Clear
 document.getElementById("clearBtn").onclick = function(){
-    ["length1","length2","breadth1","breadth2","times","price"].forEach(id=>document.getElementById(id).value = id=="times" ? 1 : 0);
+    ["length1","length2","breadth1","breadth2","times","price"].forEach(id=>document.getElementById(id).value = id=="times"?1:0);
     document.getElementById("areaResult").textContent = "";
     document.getElementById("amountResult").textContent = "";
 };
