@@ -11,201 +11,273 @@
         background: #f0f4f8;
         color: #333;
     }
+
+    /* Header */
     header {
         background: linear-gradient(90deg, #9C27B0, #FF4081);
         color: white;
-        padding: 50px 20px;
         text-align: center;
-        border-bottom-left-radius: 20px;
-        border-bottom-right-radius: 20px;
-        box-shadow: 0 6px 20px rgba(156, 39, 176, 0.3);
+        padding: 60px 20px;
+        border-bottom-left-radius: 25px;
+        border-bottom-right-radius: 25px;
+        box-shadow: 0 8px 25px rgba(156,39,176,0.3);
+        position: relative;
     }
     header h1 {
+        font-size: 42px;
         margin: 0;
-        font-size: 40px;
     }
     header p {
         font-size: 18px;
         margin-top: 10px;
         opacity: 0.9;
     }
+
     .container {
-        max-width: 1000px;
+        max-width: 1100px;
         margin: 40px auto;
         padding: 0 20px;
     }
+
     h2 {
         text-align: center;
-        color: #444;
         margin-bottom: 20px;
+        color: #444;
     }
+
+    /* Feature Cards */
     .features {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 22px;
-        margin-bottom: 40px;
+        margin-bottom: 50px;
     }
     .feature-card {
         background: #fff;
         border-radius: 15px;
         padding: 25px 20px;
         text-align: center;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.1);
         transition: transform 0.3s, box-shadow 0.3s;
         position: relative;
     }
     .feature-card:hover {
         transform: translateY(-6px);
-        box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        box-shadow: 0 10px 22px rgba(0,0,0,0.15);
     }
     .feature-card img {
         width: 60px;
         margin-bottom: 15px;
     }
-    .feature-card h3 {
-        margin: 10px 0;
-        font-size: 20px;
-        color: #222;
-    }
-    .feature-card p {
-        color: #555;
-        font-size: 15px;
-    }
-
-    /* 🔒 Premium style */
-    .premium {
-        opacity: 0.6;
-        position: relative;
-    }
-    .premium::after {
-        content: "🔒 Premium in App";
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        background: linear-gradient(90deg, #FF4081, #FF9800);
-        color: white;
-        font-size: 11px;
-        padding: 4px 8px;
-        border-radius: 8px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    }
 
     /* Buttons */
-    .btn {
-		  border:none;
-		  border-radius:8px;
-		  padding:10px 18px;
-		  font-weight:600;
-		  cursor:pointer;
-		  transition:transform .15s, box-shadow .15s;
-		  color:#fff;
-		}
+    .buttons {
+        text-align: center;
+        margin: 40px 0;
+    }
+    .buttons a {
+        display: inline-block;
+        padding: 15px 35px;
+        margin: 10px;
+        font-size: 18px;
+        border-radius: 10px;
+        color: white;
+        text-decoration: none;
+        transition: 0.3s;
+    }
     .btn-download {
         background: linear-gradient(90deg, #FF4081, #FF9800);
         box-shadow: 0 6px 15px rgba(255, 64, 129, 0.4);
-    }
-    .btn-download:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 20px rgba(255, 64, 129, 0.5);
     }
     .btn-web {
         background: linear-gradient(90deg, #00BFA5, #1DE9B6);
         box-shadow: 0 6px 15px rgba(0, 191, 165, 0.3);
     }
-    .btn-web:hover {
+    .btn-download:hover, .btn-web:hover {
         transform: translateY(-4px);
-        box-shadow: 0 10px 20px rgba(0, 191, 165, 0.4);
     }
 
-    /* Why Download Section */
-    .download-section {
-        background: #fff;
-        border-radius: 20px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        padding: 40px 30px;
+    /* How it Works */
+    .steps {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
         text-align: center;
-        margin-bottom: 40px;
+        margin: 60px 0;
     }
-    .download-section h3 {
+    .step {
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        flex: 1 1 280px;
+        padding: 25px 15px;
+    }
+    .step h3 {
         color: #FF4081;
-        font-size: 24px;
-        margin-bottom: 15px;
+        margin: 10px 0;
     }
-    .download-section p {
-        color: #555;
+    .step span {
+        display: inline-block;
+        background: #9C27B0;
+        color: #fff;
+        font-weight: bold;
+        width: 36px;
+        height: 36px;
+        line-height: 36px;
+        border-radius: 50%;
         font-size: 16px;
+    }
+
+    /* Comparison Table */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        margin-bottom: 60px;
+    }
+    th, td {
+        padding: 15px;
+        text-align: center;
+        border-bottom: 1px solid #eee;
+    }
+    th {
+        background: linear-gradient(90deg, #9C27B0, #FF4081);
+        color: #fff;
+    }
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Testimonials */
+    .testimonials {
+        background: #fff;
+        padding: 50px 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        margin-bottom: 60px;
+    }
+    .testimonial {
+        text-align: center;
         margin-bottom: 25px;
+        font-style: italic;
+        color: #555;
+    }
+    .testimonial strong {
+        display: block;
+        color: #FF4081;
+        margin-top: 8px;
+    }
+
+    /* FAQ */
+    .faq {
+        background: #fff;
+        padding: 40px 30px;
+        border-radius: 15px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        margin-bottom: 50px;
+    }
+    .faq h3 {
+        color: #FF4081;
+        margin-bottom: 20px;
+    }
+    .faq p {
+        margin: 10px 0;
     }
 
     footer {
         text-align: center;
-        padding: 20px;
+        padding: 25px;
         font-size: 14px;
         color: #666;
     }
-		
+
+    @media(max-width:800px){
+        header h1 { font-size: 32px; }
+    }
 </style>
 </head>
 <body>
 
 <header>
     <h1>Land Calculator Lite</h1>
-    <p>Quickly calculate area and price — upgrade to the full app for premium features!</p>
+    <p>Calculate, compare and estimate your land area instantly — try the app for premium tools.</p>
 </header>
 
 <div class="container">
-    <h2>Features Overview</h2>
+
+    <h2>Features</h2>
     <div class="features">
         <div class="feature-card">
             <img src="https://img.icons8.com/ios-filled/100/000000/measure.png" alt="Units">
-            <h3>Basic Unit Conversion</h3>
-            <p>Use meters, feet, inches, and centimeters easily in your browser.</p>
+            <h3>Multi Units Support</h3>
+            <p>Convert between meters, feet, and inches easily in your browser.</p>
         </div>
-
-        <div class="feature-card premium">
-            <img src="https://img.icons8.com/ios/100/000000/diamond.png" alt="Premium Units">
-            <h3>Advanced Units</h3>
-            <p>Access Nol, Haat, Bigha, Acre, Hectare, and more by downloading the Android app.</p>
-        </div>
-
         <div class="feature-card">
             <img src="https://img.icons8.com/ios-filled/100/000000/calculator.png" alt="Calculator">
-            <h3>Area Calculator</h3>
-            <p>Instantly compute total land area using length and breadth in various basic units.</p>
+            <h3>Instant Calculation</h3>
+            <p>Enter your land dimensions and instantly see area results in multiple formats.</p>
         </div>
-
         <div class="feature-card premium">
             <img src="https://img.icons8.com/ios/100/000000/money.png" alt="Price">
             <h3>Price Estimation</h3>
             <p>Calculate land prices per area unit — available in the full Android app.</p>
         </div>
-
         <div class="feature-card">
             <img src="https://img.icons8.com/ios-filled/100/000000/web.png" alt="Web">
-            <h3>Web Version</h3>
-            <p>Try the simplified calculator online — no installation required.</p>
+            <h3>Web Friendly</h3>
+            <p>Lightweight and responsive for any browser, mobile, or tablet.</p>
         </div>
-
         <div class="feature-card">
-            <img src="https://img.icons8.com/ios/100/000000/smartphone.png" alt="Mobile App">
-            <h3>Offline Android App</h3>
-            <p>Download the app for full access, advanced units, and offline use.</p>
+            <img src="https://img.icons8.com/ios/100/000000/diamond.png" alt="Premium">
+            <h3>Premium Units 🔒</h3>
+            <p>Advanced land units like Nol, Haat, Bigha & Acre available in Android app.</p>
         </div>
     </div>
 
-    <div class="download-section">
-        <h3>🌟 Why Download the App?</h3>
-        <p>The Android version includes premium unit support (Nol, Haat, Bigha, Acre, etc.), price calculator, offline history, and extra customization.</p>
-        <button class="btn btn-download"><a href="https://github.com/SKR0411/LandCalculatorApp/releases/download/v1.0/land_calculator.apk" clss="btn-download">Download App</a></button>
-        <button class="btn btn-web"><a href="land_calculator_lite.html" clss="btn-web">Try Web Version</a></button>
+    <div class="buttons">
+        <a href="land_calculator_lite.html" class="btn-web">Use Web Version</a>
+        <a href="https://github.com/SKR0411/LandCalculatorApp/releases/download/v1.0/land_calculator.apk" class="btn-download">Download App</a>
     </div>
+
+    <h2>How It Works</h2>
+    <div class="steps">
+        <div class="step"><span>1</span><h3>Enter Values</h3><p>Input your land's length and breadth in any supported unit.</p></div>
+        <div class="step"><span>2</span><h3>Choose Units</h3><p>Select units for measurement. 🔒 Premium units require app.</p></div>
+        <div class="step"><span>3</span><h3>Get Results</h3><p>Instantly view calculated area and estimated price.</p></div>
+    </div>
+
+    <h2>Web vs. App Comparison</h2>
+    <table>
+        <tr><th>Feature</th><th>Web Version</th><th>Android App</th></tr>
+        <tr><td>Basic Units (m, ft, inch)</td><td>✅</td><td>✅</td></tr>
+        <tr><td>Advanced Units (Bigha, Acre, Haat)</td><td>🔒</td><td>✅</td></tr>
+        <tr><td>Price Calculator</td><td>🔒</td><td>✅</td></tr>
+        <tr><td>Offline Usage</td><td>❌</td><td>✅</td></tr>
+        <tr><td>Save History</td><td>❌</td><td>✅</td></tr>
+        <tr><td>Dark Mode</td><td>❌</td><td>✅</td></tr>
+    </table>
+
+    <div class="testimonials">
+        <h2>What Users Say</h2>
+        <div class="testimonial">“Simple, accurate, and fast! Helped me calculate land plots easily.” <strong>– Rajesh Kumar</strong></div>
+        <div class="testimonial">“Loved the clean UI and the offline features in the app!” <strong>– Sneha Patel</strong></div>
+    </div>
+
+    <div class="faq">
+        <h3>Frequently Asked Questions</h3>
+        <p><strong>💡 Is the web version free?</strong><br>Yes, it's completely free for basic unit conversions and calculations.</p>
+        <p><strong>📱 Why download the Android app?</strong><br>The app unlocks advanced units, price calculator, offline mode, and more.</p>
+        <p><strong>🧮 Can I calculate in Bigha or Acre online?</strong><br>These units are premium-only, available in the Android version.</p>
+    </div>
+
 </div>
 
 <footer>
-		<p style="font-size:13px;color:#777;margin-top:6px;">
-    	🔒 Advanced units like Nol, Haat, Acre, etc. are available in the full Android app.
-    </p>
-    &copy; 2025 Land Calculator Lite. All rights reserved.
+    &copy; 2025 Land Calculator Lite — Designed by SKR. All rights reserved.
 </footer>
 
 </body>
