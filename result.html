@@ -1,45 +1,52 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Land Calculator — Result</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculation Result</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body data-page="result" class="ultra-vibrant">
-  <header class="topbar">
-    <div class="container topbar-inner">
-      <h1 class="brand">Land Calculator <span class="badge">Lite</span></h1>
-      <nav class="nav">
-        <a href="land_calculator_lite.html" class="nav-link">Calculator</a>
-        <a href="result.html" class="nav-link active">Result</a>
-        <a href="history.html" class="nav-link">History</a>
-      </nav>
+<body onload="pageInit_result()">
+  <div class="topbar">
+    <h1 class="brand">Land Calculator</h1>
+  </div>
+
+  <div class="container">
+    <div class="card">
+      <h2>Calculation Result</h2>
+      <div id="resultBox" style="font-size:1.1rem; line-height:1.6;"></div>
+      <div style="margin-top:20px;">
+        <button class="btn btn--neon" id="saveBtn">💾 Save</button>
+        <button class="btn btn--outline" onclick="window.location.href='index.html'">↩ Back</button>
+      </div>
     </div>
-  </header>
+  </div>
 
-  <main class="container">
-    <section class="card glass card--padded" id="resultCard">
-      <h2>Result</h2>
-      <div id="resultSummary" class="result-summary">
-        <!-- Filled by JS -->
-      </div>
-
-      <div class="row gap" style="margin-top:16px;">
-        <button id="saveToHistory" class="btn btn--neon">Save</button>
-        <button id="backToCalc" class="btn btn--outline">Back</button>
-        <button id="openHistory" class="btn btn--ghost">History</button>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container muted small">Computed in browser • Session storage used for transfer</div>
-  </footer>
-
-  <div id="toast" class="toast" style="display:none;"></div>
+  <div id="toast" class="toast"></div>
 
   <script src="script.js"></script>
-  <script>pageInit_result()</script>
+  <script>
+    function pageInit_result() {
+      const data = JSON.parse(localStorage.getItem('lastResult') || '{}');
+      const box = document.getElementById('resultBox');
+      if (!data.amount) {
+        box.innerHTML = '<p>⚠ No result found. Please calculate again.</p>';
+        return;
+      }
+      box.innerHTML = `
+        <strong>Area:</strong> ${data.areaDisplay}<br>
+        <strong>Rate Unit:</strong> ${data.rateU}<br>
+        <strong>Total Amount:</strong> ₹${data.amount}<br>
+        <small>Calculated at: ${data.timestamp}</small>
+      `;
+
+      document.getElementById('saveBtn').addEventListener('click', () => {
+        const history = JSON.parse(localStorage.getItem('calcHistory') || '[]');
+        history.push(data);
+        localStorage.setItem('calcHistory', JSON.stringify(history));
+        showToast('Saved to History (Locked)');
+      });
+    }
+  </script>
 </body>
 </html>

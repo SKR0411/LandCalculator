@@ -67,35 +67,44 @@
     const clearBtn=$('#clearBtn');
     const preview=$('#preview');
 
-    calcBtn.addEventListener('click',()=>{
-      const la=$('#lengthA').value;
-      const lb=$('#lengthB').value;
-      const ba=$('#breadthA').value;
-      const bb=$('#breadthB').value;
-      const laU=$('#lengthAUnit').value;
-      const lbU=$('#lengthBUnit').value;
-      const baU=$('#breadthAUnit').value;
-      const bbU=$('#breadthBUnit').value;
-      const mult=$('#multiplier').value||1;
-      const rate=$('#rate').value||0;
-      const rateU=$('#rateAreaUnit').value;
-
-      if([la,lb,ba,bb].some(v=>v===''||isNaN(v))){
-        showToast('Please enter valid numeric inputs.');
-        preview.value='⚠ Invalid input!';
-        return;
-      }
-
-      const l=lengthToMeters(la,laU)+lengthToMeters(lb,lbU);
-      const b=lengthToMeters(ba,baU)+lengthToMeters(bb,bbU);
-      const area=l*b;
-      const areaDisplay=formatArea(area,'Square Meter');
-      const amount=calcAmount(area,mult,rate,rateU);
-
-      preview.value=`Area: ${areaDisplay}\nRate Unit: ${rateU}\nTotal: ₹${amount}`;
-      showToast('Calculated!');
-    });
-
+		calcBtn.addEventListener('click', () => {
+		  const la = $('#lengthA').value;
+		  const lb = $('#lengthB').value;
+		  const ba = $('#breadthA').value;
+		  const bb = $('#breadthB').value;
+		  const laU = $('#lengthAUnit').value;
+		  const lbU = $('#lengthBUnit').value;
+		  const baU = $('#breadthAUnit').value;
+		  const bbU = $('#breadthBUnit').value;
+		  const mult = $('#multiplier').value || 1;
+		  const rate = $('#rate').value || 0;
+		  const rateU = $('#rateAreaUnit').value;
+		
+		  if ([la, lb, ba, bb].some(v => v === '' || isNaN(v))) {
+		    showToast('Please enter valid numeric inputs.');
+		    return;
+		  }
+		
+		  const l = lengthToMeters(la, laU) + lengthToMeters(lb, lbU);
+		  const b = lengthToMeters(ba, baU) + lengthToMeters(bb, bbU);
+		  const area = l * b;
+		  const areaDisplay = formatArea(area, 'Square Meter');
+		  const amount = calcAmount(area, mult, rate, rateU);
+		
+		  // Prepare result data
+		  const result = {
+		    areaDisplay,
+		    rateU,
+		    amount,
+		    timestamp: new Date().toLocaleString()
+		  };
+		
+		  // Save temporarily to localStorage for the result page
+		  localStorage.setItem('lastResult', JSON.stringify(result));
+		
+		  // Redirect to result page
+		  window.location.href = 'result.html';
+		});
     clearBtn.addEventListener('click',()=>{
       ['lengthA','lengthB','breadthA','breadthB','multiplier','rate'].forEach(id=>{
         const el=document.getElementById(id);
