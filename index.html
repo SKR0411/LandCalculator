@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Land Calculator App</title>
+<title>Land Calculator Lite</title>
 <style>
     body {
         margin: 0;
@@ -12,42 +12,51 @@
         color: #333;
     }
     header {
-        background: linear-gradient(90deg, #FF6200EE, #FF4081);
+        background: linear-gradient(90deg, #9C27B0, #FF4081);
         color: white;
-        padding: 40px 20px;
+        padding: 50px 20px;
         text-align: center;
         border-bottom-left-radius: 20px;
         border-bottom-right-radius: 20px;
+        box-shadow: 0 6px 20px rgba(156, 39, 176, 0.3);
     }
     header h1 {
         margin: 0;
-        font-size: 36px;
+        font-size: 40px;
     }
     header p {
         font-size: 18px;
         margin-top: 10px;
+        opacity: 0.9;
     }
     .container {
         max-width: 1000px;
-        margin: 30px auto;
+        margin: 40px auto;
         padding: 0 20px;
+    }
+    h2 {
+        text-align: center;
+        color: #444;
+        margin-bottom: 20px;
     }
     .features {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-        margin-bottom: 30px;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 22px;
+        margin-bottom: 40px;
     }
     .feature-card {
         background: #fff;
         border-radius: 15px;
-        padding: 20px;
+        padding: 25px 20px;
         text-align: center;
         box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        transition: transform 0.3s;
+        transition: transform 0.3s, box-shadow 0.3s;
+        position: relative;
     }
     .feature-card:hover {
-        transform: translateY(-5px);
+        transform: translateY(-6px);
+        box-shadow: 0 12px 25px rgba(0,0,0,0.15);
     }
     .feature-card img {
         width: 60px;
@@ -55,14 +64,40 @@
     }
     .feature-card h3 {
         margin: 10px 0;
+        font-size: 20px;
+        color: #222;
     }
+    .feature-card p {
+        color: #555;
+        font-size: 15px;
+    }
+
+    /* 🔒 Premium style */
+    .premium {
+        opacity: 0.6;
+        position: relative;
+    }
+    .premium::after {
+        content: "🔒 Premium in App";
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: linear-gradient(90deg, #FF4081, #FF9800);
+        color: white;
+        font-size: 11px;
+        padding: 4px 8px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    /* Buttons */
     .buttons {
         text-align: center;
-        margin: 30px 0;
+        margin: 40px 0;
     }
     .buttons a {
         display: inline-block;
-        padding: 15px 30px;
+        padding: 15px 35px;
         margin: 10px;
         font-size: 18px;
         border-radius: 10px;
@@ -71,17 +106,42 @@
         transition: 0.3s;
     }
     .btn-download {
-        background: linear-gradient(90deg, #FF6200EE, #FF4081);
+        background: linear-gradient(90deg, #FF4081, #FF9800);
+        box-shadow: 0 6px 15px rgba(255, 64, 129, 0.4);
     }
     .btn-download:hover {
-        background: linear-gradient(90deg, #FF4081, #FF6200EE);
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(255, 64, 129, 0.5);
     }
     .btn-web {
         background: linear-gradient(90deg, #00BFA5, #1DE9B6);
+        box-shadow: 0 6px 15px rgba(0, 191, 165, 0.3);
     }
     .btn-web:hover {
-        background: linear-gradient(90deg, #1DE9B6, #00BFA5);
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0, 191, 165, 0.4);
     }
+
+    /* Why Download Section */
+    .download-section {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        padding: 40px 30px;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .download-section h3 {
+        color: #FF4081;
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+    .download-section p {
+        color: #555;
+        font-size: 16px;
+        margin-bottom: 25px;
+    }
+
     footer {
         text-align: center;
         padding: 20px;
@@ -94,47 +154,54 @@
 
 <header>
     <h1>Land Calculator Lite</h1>
-    <p>Calculate area and price of land easily, with multi-unit support and simple UI.</p>
+    <p>Quickly calculate area and price — upgrade to the full app for premium features!</p>
 </header>
 
 <div class="container">
-    <h2 style="text-align:center;">Features</h2>
+    <h2>Features Overview</h2>
     <div class="features">
         <div class="feature-card">
             <img src="https://img.icons8.com/ios-filled/100/000000/measure.png" alt="Units">
-            <h3>Multi Units Support</h3>
-            <p>Convert lengths and areas between meters, feet, inches, hectares, acres, and more.</p>
+            <h3>Basic Unit Conversion</h3>
+            <p>Use meters, feet, inches, and centimeters easily in your browser.</p>
         </div>
+
+        <div class="feature-card premium">
+            <img src="https://img.icons8.com/ios/100/000000/diamond.png" alt="Premium Units">
+            <h3>Advanced Units</h3>
+            <p>Access Nol, Haat, Bigha, Acre, Hectare, and more by downloading the Android app.</p>
+        </div>
+
         <div class="feature-card">
             <img src="https://img.icons8.com/ios-filled/100/000000/calculator.png" alt="Calculator">
             <h3>Area Calculator</h3>
-            <p>Calculate land area quickly using length and breadth, with optional multipliers.</p>
+            <p>Instantly compute total land area using length and breadth in various basic units.</p>
         </div>
-        <div class="feature-card">
-            <img src="https://img.icons8.com/ios-filled/100/000000/money.png" alt="Price">
+
+        <div class="feature-card premium">
+            <img src="https://img.icons8.com/ios/100/000000/money.png" alt="Price">
             <h3>Price Estimation</h3>
-            <p>Compute total land price using price per unit and multipliers for bulk calculations.</p>
+            <p>Calculate land prices per area unit — available in the full Android app.</p>
         </div>
+
         <div class="feature-card">
-            <img src="https://img.icons8.com/ios/100/000000/diamond.png" alt="Premium">
-            <h3>Premium Units</h3>
-            <p>Unlock advanced units like Nol, Haat, Bigha, Kear, and more by downloading the app.</p>
+            <img src="https://img.icons8.com/ios-filled/100/000000/web.png" alt="Web">
+            <h3>Web Version</h3>
+            <p>Try the simplified calculator online — no installation required.</p>
         </div>
+
         <div class="feature-card">
             <img src="https://img.icons8.com/ios/100/000000/smartphone.png" alt="Mobile App">
-            <h3>Mobile Friendly</h3>
-            <p>Works smoothly on any smartphone or tablet for on-the-go calculations.</p>
-        </div>
-        <div class="feature-card">
-        		<img src="https://img.icons8.com/ios-filled/100/000000/web.png" alt="Web">
-            <h3>Web & App</h3>
-            <p>Use it online directly or download the full app for all features unlocked.</p>
+            <h3>Offline Android App</h3>
+            <p>Download the app for full access, advanced units, and offline use.</p>
         </div>
     </div>
 
-    <div class="buttons">
-        <a href="https://github.com/SKR0411/LandCalculatorApp/releases/download/v1.0/land_calculator.apk" class="btn-download">Download App</a>
-        <a href="land_calculator_lite.html" class="btn-web">Use Web Version</a>
+    <div class="download-section">
+        <h3>🌟 Why Download the App?</h3>
+        <p>The Android version includes premium unit support (Nol, Haat, Bigha, Acre, etc.), price calculator, offline history, and extra customization.</p>
+        <a href="https://github.com/SKR0411/LandCalculatorApp/releases/download/v1.0/land_calculator.apk" class="btn-download">Download Full App</a>
+        <a href="land_calculator_lite.html" class="btn-web">Try Web Version</a>
     </div>
 </div>
 
