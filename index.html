@@ -1,219 +1,205 @@
-<!doctype html>
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Area & Amount Calculator</title>
-  <style>
-    :root{--bg:#FAFAFA;--card:#FFFFFF;--muted:#666;--accent:#6200EE;--danger:#EE0055}
-    html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
-    body{background:var(--bg);display:flex;align-items:flex-start;justify-content:center;padding:18px}
-    .container{width:100%;max-width:900px;background:var(--card);box-shadow:0 6px 18px rgba(0,0,0,0.06);border-radius:10px;padding:18px}
-    h1{margin:6px 0 14px;font-size:20px}
-    .row{display:flex;flex-wrap:wrap;gap:12px}
-    .col{flex:1 1 220px;min-width:200px}
-    label{display:block;font-weight:600;margin-bottom:6px}
-    input[type="number"], select{width:100%;box-sizing:border-box;padding:8px;border:1px solid #CCC;border-radius:6px;font-size:15px}
-    .small{font-size:14px;color:var(--muted)}
-    .section{margin-top:14px}
-    .btn{display:inline-block;width:100%;padding:11px;border-radius:8px;background:var(--accent);color:#fff;text-align:center;border:0;font-weight:700;cursor:pointer}
-    .btn.secondary{background:#EEE;color:#222}
-    .result{margin-top:12px;padding:12px;background:#F3F3F3;border-radius:8px;font-size:16px}
-    .grid-two{display:flex;gap:12px}
-    @media(max-width:560px){.grid-two{flex-direction:column}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Area Calculator</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #FAFAFA;
+        padding: 20px;
+        max-width: 600px;
+        margin: auto;
+    }
+    h2 {
+        margin-top: 20px;
+        color: #000;
+    }
+    .row {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 15px;
+    }
+    .column {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    input, select, button {
+        padding: 8px;
+        font-size: 16px;
+        width: 150px;
+    }
+    button {
+        width: 100%;
+        background: #FF6200EE;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 10px;
+        font-size: 16px;
+    }
+    .result-box {
+        margin-top: 15px;
+        background: #EEEEEE;
+        padding: 10px;
+        font-size: 18px;
+        color: #333;
+        min-height: 50px;
+    }
+    .clear-btn {
+        background: #FFEE0055;
+        color: #fff;
+    }
+</style>
 </head>
 <body>
-  <div class="container" role="main">
-    <h1>Area & Amount Calculator</h1><div class="section">
-  <div class="row">
-    <div class="col">
-      <label for="length1">Length 1</label>
-      <input id="length1" type="number" inputmode="decimal" value="0" step="any" />
-      <select id="unitLength1" aria-label="Length unit 1" class="small">
-        <option value="mm">Millimeter (mm)</option>
-        <option value="cm">Centimeter (cm)</option>
-        <option value="m">Meter (m)</option>
-        <option value="in">Inch (in)</option>
-        <option value="ft">Foot (ft)</option>
-      </select>
-    </div>
 
-    <div class="col">
-      <label for="length2">Length 2</label>
-      <input id="length2" type="number" inputmode="decimal" value="0" step="any" />
-      <select id="unitLength2" aria-label="Length unit 2" class="small">
-        <option value="mm">Millimeter (mm)</option>
-        <option value="cm">Centimeter (cm)</option>
-        <option value="m">Meter (m)</option>
-        <option value="in">Inch (in)</option>
-        <option value="ft">Foot (ft)</option>
-      </select>
+<h2>Length</h2>
+<div class="row">
+    <div class="column">
+        <input type="number" id="length1" value="0" step="0.01">
+        <select id="lengthUnit1"></select>
     </div>
-  </div>
-
-  <div class="row" style="margin-top:10px;align-items:end">
-    <div style="flex:1">
-      <button id="calcArea" class="btn">Calculate Area</button>
+    <div class="column">
+        <input type="number" id="length2" value="0" step="0.01">
+        <select id="lengthUnit2"></select>
     </div>
-    <div style="width:200px">
-      <label for="areaUnit">Area Unit</label>
-      <select id="areaUnit">
-        <option value="m2">m²</option>
-        <option value="cm2">cm²</option>
-        <option value="mm2">mm²</option>
-        <option value="ft2">ft²</option>
-        <option value="in2">in²</option>
-      </select>
-    </div>
-  </div>
-
-  <div id="areaResult" class="result" aria-live="polite">Area: 0</div>
 </div>
 
-<hr style="margin:16px 0;border:none;border-top:1px solid #EEE" />
-
-<div class="section">
-  <h2 style="font-size:16px;margin:0 0 10px">Amount / Price</h2>
-
-  <div class="row">
-    <div class="col">
-      <label for="times">Multiplier</label>
-      <input id="times" type="number" inputmode="decimal" value="1" step="any" />
-      <select id="timesUnit" class="small">
-        <option value="per_m2">per m²</option>
-        <option value="per_cm2">per cm²</option>
-        <option value="per_mm2">per mm²</option>
-        <option value="per_ft2">per ft²</option>
-        <option value="per_in2">per in²</option>
-      </select>
+<h2>Breadth</h2>
+<div class="row">
+    <div class="column">
+        <input type="number" id="breadth1" value="0" step="0.01">
+        <select id="breadthUnit1"></select>
     </div>
-
-    <div class="col">
-      <label for="price">Enter Price</label>
-      <input id="price" type="number" inputmode="decimal" value="0" step="any" />
-      <select id="priceUnit" class="small">
-        <option value="per_m2">per m²</option>
-        <option value="per_cm2">per cm²</option>
-        <option value="per_mm2">per mm²</option>
-        <option value="per_ft2">per ft²</option>
-        <option value="per_in2">per in²</option>
-      </select>
+    <div class="column">
+        <input type="number" id="breadth2" value="0" step="0.01">
+        <select id="breadthUnit2"></select>
     </div>
-  </div>
-
-  <div style="margin-top:10px">
-    <button id="calcAmount" class="btn">Calculate Amount and Price</button>
-  </div>
-
-  <div id="amountResult" class="result">Amount: 0 | Total Price: 0</div>
-
-  <div style="margin-top:12px" class="grid-two">
-    <button id="clearBtn" class="btn secondary">Clear All</button>
-  </div>
 </div>
 
-  </div>  <script>
-    // unit factors to meter
-    const lengthToMeter = {
-      mm: 0.001,
-      cm: 0.01,
-      m: 1,
-      in: 0.0254,
-      ft: 0.3048
-    };
+<div class="row">
+    <button id="calculateAreaBtn">Calculate Area</button>
+    <select id="areaUnit"></select>
+</div>
+<div class="result-box" id="areaResult"></div>
 
-    // area unit conversion to square meters
-    const areaToM2 = {
-      m2: 1,
-      cm2: 0.0001,
-      mm2: 0.000001,
-      ft2: 0.09290304,
-      in2: 0.00064516
-    };
+<h2>Amount</h2>
+<div class="row">
+    <div class="column">
+        <label>Multiplier</label>
+        <input type="number" id="times" value="1" step="1">
+        <select id="multiplier"></select>
+    </div>
+    <div class="column">
+        <label>Enter Price</label>
+        <input type="number" id="price" value="0" step="0.01">
+        <select id="priceUnit"></select>
+    </div>
+</div>
+<div class="row">
+    <button id="calculateAmountBtn">Calculate Amount</button>
+</div>
+<div class="result-box" id="amountResult"></div>
 
-    function parseNumber(value){
-      const n = parseFloat(String(value).trim());
-      return Number.isFinite(n) ? n : 0;
-    }
+<div class="row">
+    <button class="clear-btn" id="clearBtn">Clear All</button>
+</div>
 
-    function computeArea(){
-      const a = parseNumber(document.getElementById('length1').value);
-      const b = parseNumber(document.getElementById('length2').value);
-      const u1 = document.getElementById('unitLength1').value;
-      const u2 = document.getElementById('unitLength2').value;
-      // convert both to meters
-      const m1 = a * (lengthToMeter[u1] || 1);
-      const m2 = b * (lengthToMeter[u2] || 1);
-      const areaM2 = m1 * m2;
-      const target = document.getElementById('areaUnit').value;
-      const display = areaM2 / areaToM2[target];
-      return {areaM2, display, displayUnit:target};
-    }
+<script>
+const units = ["Meter", "Centimeter", "Foot", "Inch", "Nol", "Haat"];
+const areaUnits = ["Square Meter", "Square Centimeter", "Square Foot", "Square Inch", "Hectare", "Acre", "Bigha", "Kear", "Josti", "Raak", "Fon", "Kear_Josti_Raak_Fon", "Kata"];
+const multiplier = ["1","2","3","4","5","6","7","8","9","10"];
 
-    function formatNumber(n){
-      // smart formatting
-      if (Math.abs(n) >= 1){ return Number(n.toFixed(4)).toString(); }
-      return Number(n.toFixed(6)).toString();
-    }
-
-    document.getElementById('calcArea').addEventListener('click', ()=>{
-      const {areaM2, display, displayUnit} = computeArea();
-      const txt = `Area: ${formatNumber(display)} ${displayUnit}`;
-      document.getElementById('areaResult').textContent = txt;
+// Populate dropdowns
+function populateDropdown(id, arr) {
+    const select = document.getElementById(id);
+    arr.forEach(val => {
+        let option = document.createElement("option");
+        option.value = val;
+        option.textContent = val;
+        select.appendChild(option);
     });
+}
 
-    document.getElementById('calcAmount').addEventListener('click', ()=>{
-      const times = parseNumber(document.getElementById('times').value);
-      const timesUnit = document.getElementById('timesUnit').value; // e.g. per_m2
-      const price = parseNumber(document.getElementById('price').value);
-      const priceUnit = document.getElementById('priceUnit').value;
+["lengthUnit1","lengthUnit2","breadthUnit1","breadthUnit2"].forEach(id => populateDropdown(id, units));
+["areaUnit","priceUnit"].forEach(id => populateDropdown(id, areaUnits));
+populateDropdown("multiplier", multiplier);
 
-      // compute area in m2 (base)
-      const {areaM2} = computeArea();
+// Convert to meters
+function convertToMeter(value, unit) {
+    switch(unit){
+        case "Meter": return value;
+        case "Centimeter": return value * 0.01;
+        case "Foot": return value * 0.3048;
+        case "Inch": return value * 0.0254;
+        case "Nol": return value * 3.6576;
+        case "Haat": return value * 0.4572;
+        default: return value;
+    }
+}
 
-      // convert price unit to per m2 factor
-      const priceFactor = (()=>{
-        const key = priceUnit.replace('per_','');
-        return price / areaToM2[key];
-      })();
+// Calculate Area
+function calculateArea() {
+    const l1 = parseFloat(document.getElementById("length1").value) || 0;
+    const l2 = parseFloat(document.getElementById("length2").value) || 0;
+    const b1 = parseFloat(document.getElementById("breadth1").value) || 0;
+    const b2 = parseFloat(document.getElementById("breadth2").value) || 0;
 
-      // convert times unit to multiplier factor relative to m2
-      const timesFactor = (()=>{
-        const key = timesUnit.replace('per_','');
-        return times / areaToM2[key];
-      })();
+    const lu1 = document.getElementById("lengthUnit1").value;
+    const lu2 = document.getElementById("lengthUnit2").value;
+    const bu1 = document.getElementById("breadthUnit1").value;
+    const bu2 = document.getElementById("breadthUnit2").value;
+    const areaUnit = document.getElementById("areaUnit").value;
 
-      // amount = area (in m2) * times factor (but timesFactor already scaled)
-      // Simpler: interpret 'times' as a count multiplier (like quantity per unit area).
-      // We'll compute quantity = area (in m2) * times (if timesUnit matches area unit, convert accordingly)
+    const length = convertToMeter(l1, lu1) + convertToMeter(l2, lu2);
+    const breadth = convertToMeter(b1, bu1) + convertToMeter(b2, bu2);
 
-      // Convert "times" to count per m2
-      const timesPerM2 = times * (1 / areaToM2[timesUnit.replace('per_','')]);
-      const quantity = areaM2 * timesPerM2;
+    const areaSqMeter = length * breadth;
 
-      // Convert price to per m2 price
-      const pricePerM2 = price * (1 / areaToM2[priceUnit.replace('per_','')]);
+    document.getElementById("areaResult").textContent = formatArea(areaSqMeter, areaUnit);
+    return areaSqMeter;
+}
 
-      const totalPrice = quantity * pricePerM2;
+// Format Area
+function formatArea(value, unit) {
+    switch(unit){
+        case "Square Meter": return value.toFixed(2)+" m²";
+        case "Square Centimeter": return (value*10000).toFixed(1)+" cm²";
+        case "Square Foot": return (value*10.7639).toFixed(2)+" ft²";
+        case "Square Inch": return (value*1550.0031).toFixed(1)+" In²";
+        case "Hectare": return (value/10000).toFixed(5)+" Hectare";
+        case "Acre": return (value/4046.86).toFixed(5)+" Acre";
+        case "Bigha": return (value/1600).toFixed(5)+" Bigha";
+        case "Fon": return (value/(0.4572*0.4572)).toFixed(2)+" Fon";
+        default: return "Select valid unit for area.";
+    }
+}
 
-      const amountText = `Amount (quantity): ${formatNumber(quantity)} | Total Price: ${formatNumber(totalPrice)}`;
-      document.getElementById('amountResult').textContent = amountText;
-    });
+// Calculate Amount
+function calculateAmount() {
+    const times = parseFloat(document.getElementById("times").value) || 1;
+    const price = parseFloat(document.getElementById("price").value) || 0;
+    const priceUnit = document.getElementById("priceUnit").value;
 
-    document.getElementById('clearBtn').addEventListener('click', ()=>{
-      ['length1','length2','times','price'].forEach(id=>document.getElementById(id).value = (id==='times' ? '1' : '0'));
-      ['unitLength1','unitLength2','areaUnit','timesUnit','priceUnit'].forEach(id=>document.getElementById(id).selectedIndex = 0);
-      document.getElementById('areaResult').textContent = 'Area: 0';
-      document.getElementById('amountResult').textContent = 'Amount: 0 | Total Price: 0';
-    });
+    const areaSqMeter = calculateArea();
+    let amount = areaSqMeter * times * price; // Default in selected unit
+    document.getElementById("amountResult").textContent = formatArea(areaSqMeter, priceUnit)+"\n"+amount.toFixed(2)+" Rupees";
+}
 
-    // initialize small friendly default
-    document.getElementById('unitLength1').value='m';
-    document.getElementById('unitLength2').value='m';
-    document.getElementById('areaUnit').value='m2';
-    document.getElementById('timesUnit').value='per_m2';
-    document.getElementById('priceUnit').value='per_m2';
-  </script></body>
+// Clear
+document.getElementById("clearBtn").onclick = function(){
+    ["length1","length2","breadth1","breadth2","times","price"].forEach(id=>document.getElementById(id).value = id=="times" ? 1 : 0);
+    document.getElementById("areaResult").textContent = "";
+    document.getElementById("amountResult").textContent = "";
+};
+
+// Buttons
+document.getElementById("calculateAreaBtn").onclick = calculateArea;
+document.getElementById("calculateAmountBtn").onclick = calculateAmount;
+</script>
+</body>
 </html>
