@@ -72,8 +72,7 @@ body {
 	color: var(--accent2);
 }
 .card h3 {
-	margin-top: 30px;
-	margin-left: 10px;
+	margin-top:0;
 	color: var(--accent4);
 }
 
@@ -82,7 +81,7 @@ body {
 	display:flex;
 	gap:16px;
 	flex-wrap:wrap;
-	margin: 20px 10px;
+	margin: 30px 10px;
 }
 .field {
 	flex:1;

@@ -24,9 +24,9 @@
         <h2>Enter Dimensions</h2>
         <p class="muted">Two-part entry for length & breadth (use different units per part if needed).</p>
       </div>
-			
-      <h3>Length</h3>
+
       <div class="grid-2">
+      	<h3>Length</h3>
         <div class="field">
           <label>Length — Part A</label>
           <input id="lengthA" type="number" step="any" placeholder="e.g. 10" />
@@ -38,9 +38,9 @@
           <select id="lengthBUnit" class="select"></select>
         </div>
       </div>
-		
-      <h3>Breadth</h3>
+
       <div class="grid-2">
+      	<h3>Breadth</h3>
         <div class="field">
           <label>Breadth — Part A</label>
           <input id="breadthA" type="number" step="any" placeholder="e.g. 5" />
@@ -52,9 +52,9 @@
           <select id="breadthBUnit" class="select"></select>
         </div>
       </div>
-			
-     	<h3>Amount (Optional)</h3>
+
       <div class="grid-2">
+      	<h3>Amount (Optional)</h3>
         <div class="field">
           <label>Multiplier (Times)</label>
           <input id="multiplier" type="number" step="any" placeholder="e.g. 1" />
@@ -72,17 +72,11 @@
         <button id="goHistory" class="btn btn--glass">History 🔒 (Premium)</button>
       </div>
     </section>
-    
-		<section class="card glass card--padded preview-card">
-		  <h2>Result</h2>
-		  <textarea id="preview" class="preview" readonly placeholder="Results will appear here..."></textarea>
-		  <div style="margin-top:15px; text-align:center;">
-		    <button id="saveHistoryBtn" class="btn btn--neon">💾 Save to History 🔒</button>
-		  </div>
-		  <p style="font-size:13px; color:#777; margin-top:8px; text-align:center;">
-		    To view your saved history, please download the Android app.
-		  </p>
-		</section>
+
+    <section class="card glass card--padded preview-card">
+      <h2>Quick Preview</h2>
+      <textarea id="preview" class="preview" readonly placeholder="Results will appear after calculating..."></textarea>
+    </section>
   </main>
 
   <button id="fabTop" class="fab" title="New calculation">✚</button>

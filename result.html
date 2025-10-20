@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Land Calculator — Result</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="result" class="ultra-vibrant">
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <h1 class="brand">Land Calculator <span class="badge">Lite</span></h1>
+      <nav class="nav">
+        <a href="land_calculator_lite.html" class="nav-link">Calculator</a>
+        <a href="result.html" class="nav-link active">Result</a>
+        <a href="history.html" class="nav-link">History</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card glass card--padded" id="resultCard">
+      <h2>Result</h2>
+      <div id="resultSummary" class="result-summary">
+        <!-- Filled by JS -->
+      </div>
+
+      <div class="row gap" style="margin-top:16px;">
+        <button id="saveToHistory" class="btn btn--neon">Save</button>
+        <button id="backToCalc" class="btn btn--outline">Back</button>
+        <button id="openHistory" class="btn btn--ghost">History</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container muted small">Computed in browser • Session storage used for transfer</div>
+  </footer>
+
+  <div id="toast" class="toast" style="display:none;"></div>
+
+  <script src="script.js"></script>
+  <script>pageInit_result()</script>
+</body>
+</html>
