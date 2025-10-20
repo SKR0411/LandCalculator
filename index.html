@@ -1,0 +1,214 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Area & Amount Calculator</title>
+  <style>
+    :root{--accent:#6200ee;--bg:#FAFAFA;--card:#EEEEEE;--text:#111}
+    html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
+    body{background:var(--bg);color:var(--text);display:flex;align-items:flex-start;justify-content:center;padding:20px}
+    .container{max-width:900px;width:100%;background:#fff;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06);padding:18px}
+    h2{margin:6px 0 14px;font-size:20px}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .col{display:flex;flex-direction:column;gap:8px}
+    .card{background:var(--card);padding:10px;border-radius:6px}label{font-size:16px}
+input[type="number"],select{padding:8px;border:1px solid #ccc;border-radius:6px;font-size:14px;width:150px}
+.wide{width:100%}
+.btn{background:var(--accent);color:#fff;border:none;padding:10px 12px;border-radius:8px;font-weight:600;cursor:pointer}
+.btn.secondary{background:#EE0055}
+.result{background:var(--card);padding:12px;border-radius:6px;font-size:16px}
+.section-title{font-size:22px;margin-top:14px}
+@media(max-width:640px){.row{flex-direction:column}.col{width:100%}.wide{width:100%}}
+
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h2>Area & Amount Calculator</h2><div class="section">
+  <div class="section-title">Length</div>
+  <div class="row" style="margin-top:8px">
+    <div class="col">
+      <label>Length 1</label>
+      <input type="number" id="len1" value="0" step="any" />
+      <select id="lenUnit1">
+        <option value="m">m</option>
+        <option value="cm">cm</option>
+        <option value="mm">mm</option>
+        <option value="in">in</option>
+        <option value="ft">ft</option>
+      </select>
+    </div>
+
+    <div class="col">
+      <label>Length 2</label>
+      <input type="number" id="len2" value="0" step="any" />
+      <select id="lenUnit2">
+        <option value="m">m</option>
+        <option value="cm">cm</option>
+        <option value="mm">mm</option>
+        <option value="in">in</option>
+        <option value="ft">ft</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Breadth</div>
+  <div class="row" style="margin-top:8px">
+    <div class="col">
+      <label>Breadth 1</label>
+      <input type="number" id="br1" value="0" step="any" />
+      <select id="brUnit1">
+        <option value="m">m</option>
+        <option value="cm">cm</option>
+        <option value="mm">mm</option>
+        <option value="in">in</option>
+        <option value="ft">ft</option>
+      </select>
+    </div>
+
+    <div class="col">
+      <label>Breadth 2</label>
+      <input type="number" id="br2" value="0" step="any" />
+      <select id="brUnit2">
+        <option value="m">m</option>
+        <option value="cm">cm</option>
+        <option value="mm">mm</option>
+        <option value="in">in</option>
+        <option value="ft">ft</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:12px" class="row">
+  <button id="calcArea" class="btn wide">Calculate Area</button>
+  <select id="areaUnit">
+    <option value="sqm">sq m</option>
+    <option value="sqcm">sq cm</option>
+    <option value="sqmm">sq mm</option>
+    <option value="sqft">sq ft</option>
+    <option value="sqin">sq in</option>
+  </select>
+</div>
+
+<div style="margin-top:12px" class="result" id="areaResult">Area will appear here</div>
+
+<div class="section">
+  <div class="section-title">Amount</div>
+  <div class="row" style="margin-top:8px">
+
+    <div class="col">
+      <label>Multiplier</label>
+      <input type="number" id="times" value="1" step="any" />
+      <select id="multUnit">
+        <option value="unit">unit</option>
+        <option value="dozen">dozen</option>
+        <option value="hundred">hundred</option>
+      </select>
+    </div>
+
+    <div class="col">
+      <label>Price</label>
+      <input type="number" id="price" value="0" step="any" />
+      <select id="pricePer">
+        <option value="sqm">per sq m</option>
+        <option value="sqft">per sq ft</option>
+        <option value="sqcm">per sq cm</option>
+        <option value="sqin">per sq in</option>
+      </select>
+    </div>
+
+  </div>
+
+  <div style="margin-top:12px" class="row">
+    <button id="calcAmount" class="btn wide">Calculate Amount and Price</button>
+  </div>
+
+  <div style="margin-top:12px" class="result" id="amountResult">Amount & Price will appear here</div>
+
+</div>
+
+<div style="margin-top:12px" class="row">
+  <button id="clearBtn" class="btn secondary wide">Clear All</button>
+</div>
+
+<p style="margin-top:10px;font-size:13px;color:#666">Note: units are converted automatically. Use decimal numbers where needed.</p>
+
+  </main>  <script>
+    // conversion factors to meters
+    const toMeters = { m:1, cm:0.01, mm:0.001, in:0.0254, ft:0.3048 };
+
+    // area conversion from square meters
+    const areaFromSqM = { sqm:1, sqcm:10000, sqmm:1000000, sqft:10.76391041671, sqin:1550.0031 };
+
+    function parseFloatSafe(v){const n=parseFloat(v);return isFinite(n)?n:0}
+
+    function computeAreaInSqM(){
+      const l1 = parseFloatSafe(document.getElementById('len1').value) * toMeters[document.getElementById('lenUnit1').value];
+      const l2 = parseFloatSafe(document.getElementById('len2').value) * toMeters[document.getElementById('lenUnit2').value];
+      const b1 = parseFloatSafe(document.getElementById('br1').value) * toMeters[document.getElementById('brUnit1').value];
+      const b2 = parseFloatSafe(document.getElementById('br2').value) * toMeters[document.getElementById('brUnit2').value];
+
+      // If both length fields are filled, assume length = l1 + l2, otherwise treat as two alternate values and multiply average?
+      // To mirror the android layout intent: assume final length = l1 (first) * l2 (second) ???
+      // More likely intent: each pair is like two inputs that together make a value (e.g., meters + cm). We'll interpret as sum.
+
+      const length = l1 + l2;
+      const breadth = b1 + b2;
+      const areaSqM = length * breadth; // square meters
+      return areaSqM;
+    }
+
+    document.getElementById('calcArea').addEventListener('click', ()=>{
+      const areaSqM = computeAreaInSqM();
+      const outUnit = document.getElementById('areaUnit').value;
+      const converted = areaSqM * (areaFromSqM[outUnit] || 1);
+      const display = (Math.round(converted*100000)/100000).toLocaleString();
+      document.getElementById('areaResult').textContent = `${display} ${outUnit.replace('sq','square ')}`;
+    });
+
+    document.getElementById('calcAmount').addEventListener('click', ()=>{
+      const areaSqM = computeAreaInSqM();
+      const price = parseFloatSafe(document.getElementById('price').value);
+      const times = parseFloatSafe(document.getElementById('times').value);
+      const pricePer = document.getElementById('pricePer').value; // e.g., 'sqm' or 'sqft'
+
+      // convert area to price unit
+      let areaForPrice;
+      if(pricePer === 'sqm') areaForPrice = areaSqM;
+      else if(pricePer === 'sqcm') areaForPrice = areaSqM * areaFromSqM['sqcm'];
+      else if(pricePer === 'sqmm') areaForPrice = areaSqM * areaFromSqM['sqmm'];
+      else if(pricePer === 'sqft') areaForPrice = areaSqM * areaFromSqM['sqft'];
+      else if(pricePer === 'sqin') areaForPrice = areaSqM * areaFromSqM['sqin'];
+      else areaForPrice = areaSqM;
+
+      // compute amount (multiplier is applied to area)
+      const totalUnits = times * areaForPrice;
+      const totalPrice = totalUnits * price;
+
+      const totalUnitsDisplay = (Math.round(totalUnits*100000)/100000).toLocaleString();
+      const totalPriceDisplay = (Math.round(totalPrice*100)/100).toLocaleString();
+
+      document.getElementById('amountResult').innerHTML = `Total units: <strong>${totalUnitsDisplay}</strong><br>Total price: <strong>${totalPriceDisplay}</strong>`;
+    });
+
+    document.getElementById('clearBtn').addEventListener('click', ()=>{
+      ['len1','len2','br1','br2','times','price'].forEach(id=>document.getElementById(id).value = id==='times' ? '1' : '0');
+      ['lenUnit1','lenUnit2','brUnit1','brUnit2','areaUnit','multUnit','pricePer'].forEach(id=>document.getElementById(id).selectedIndex = 0);
+      document.getElementById('areaResult').textContent = 'Area will appear here';
+      document.getElementById('amountResult').textContent = 'Amount & Price will appear here';
+    });
+
+    // set friendly default selected values
+    document.getElementById('lenUnit1').value = 'm';
+    document.getElementById('lenUnit2').value = 'cm';
+    document.getElementById('brUnit1').value = 'm';
+    document.getElementById('brUnit2').value = 'cm';
+    document.getElementById('areaUnit').value = 'sqm';
+    document.getElementById('pricePer').value = 'sqft';
+  </script></body>
+</html>
