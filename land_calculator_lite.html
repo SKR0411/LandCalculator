@@ -72,11 +72,17 @@
         <button id="goHistory" class="btn btn--glass">History 🔒 (Premium)</button>
       </div>
     </section>
-
-    <section class="card glass card--padded preview-card">
-      <h2>Quick Preview</h2>
-      <textarea id="preview" class="preview" readonly placeholder="Results will appear after calculating..."></textarea>
-    </section>
+    
+		<section class="card glass card--padded preview-card">
+		  <h2>Result</h2>
+		  <textarea id="preview" class="preview" readonly placeholder="Results will appear here..."></textarea>
+		  <div style="margin-top:15px; text-align:center;">
+		    <button id="saveHistoryBtn" class="btn btn--neon">💾 Save to History 🔒</button>
+		  </div>
+		  <p style="font-size:13px; color:#777; margin-top:8px; text-align:center;">
+		    To view your saved history, please download the Android app.
+		  </p>
+		</section>
   </main>
 
   <button id="fabTop" class="fab" title="New calculation">✚</button>

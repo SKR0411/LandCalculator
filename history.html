@@ -5,43 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>History (Locked)</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    .blurred {
-      filter: blur(6px);
-      pointer-events: none;
-      user-select: none;
-      opacity: 0.7;
-    }
-  </style>
 </head>
-<body onload="pageInit_history()">
-  <div class="topbar">
-    <h1 class="brand">History 🔒</h1>
-  </div>
-
-  <div class="container">
-    <div class="card">
-      <h2>Saved Calculations</h2>
-      <ul id="historyList" class="blurred"></ul>
-      <div style="margin-top:20px; text-align:center;">
-        <p><strong>Premium Required to Unlock History</strong></p>
-        <button class="btn btn--neon">Upgrade to Premium 💎</button>
-      </div>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <h1 class="brand">Land Calculator <span class="badge">Lite</span></h1>
     </div>
-  </div>
+  </header>
 
-  <script>
-    function pageInit_history() {
-      const list = document.getElementById('historyList');
-      const history = JSON.parse(localStorage.getItem('calcHistory') || '[]');
-      if (history.length === 0) {
-        list.innerHTML = '<li>No saved results.</li>';
-        return;
-      }
-      list.innerHTML = history.map(h => `
-        <li>${h.areaDisplay} | ₹${h.amount} (${h.timestamp})</li>
-      `).join('');
-    }
-  </script>
+  <main class="container">
+    <div class="card" style="text-align:center;">
+      <h2>History 🔒</h2>
+      <p>Your saved calculations are only available in the full Android app.</p>
+      <p>Download the app to unlock full history and premium features.</p>
+      <a href="https://github.com/SKR0411/LandCalculatorApp/releases/download/v1.0/land_calculator.apk" class="btn btn--neon" style="margin-top:20px;">📱 Download App</a>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container muted small">History is available only in the Android app.</div>
+  </footer>
 </body>
 </html>
