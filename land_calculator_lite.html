@@ -26,6 +26,7 @@
       </div>
 
       <div class="grid-2">
+      	<h3>Length</h3>
         <div class="field">
           <label>Length — Part A</label>
           <input id="lengthA" type="number" step="any" placeholder="e.g. 10" />
@@ -39,6 +40,7 @@
       </div>
 
       <div class="grid-2">
+      	<h3>Breadth</h3>
         <div class="field">
           <label>Breadth — Part A</label>
           <input id="breadthA" type="number" step="any" placeholder="e.g. 5" />
@@ -52,12 +54,13 @@
       </div>
 
       <div class="grid-2">
+      	<h3>Amount (Optional)</h3>
         <div class="field">
           <label>Multiplier (Times)</label>
           <input id="multiplier" type="number" step="any" placeholder="e.g. 1" />
         </div>
         <div class="field">
-          <label>Rate / Price</label>
+          <label>Price / Unit Area</label>
           <input id="rate" type="number" step="any" placeholder="e.g. 1000" />
           <select id="rateAreaUnit" class="select"></select>
         </div>
@@ -79,6 +82,10 @@
   <button id="fabTop" class="fab" title="New calculation">✚</button>
 
   <footer class="footer">
+  	<p style="font-size:13px;color:#777;margin-top:6px;">
+    	🔒 Advanced units like Nol, Haat, Acre, etc. are available in the full Android app.
+    	<a href="https://github.com/SKR0411/LandCalculatorApp/releases/download/v1.0/land_calculator.apk" class="btn-download">Download App</a>
+		</p>
     <div class="container muted small">Ultra-Vibrant • Blue→Purple→Pink • Local-only</div>
   </footer>
 
@@ -86,5 +93,6 @@
 
   <script src="script.js"></script>
   <script>pageInit_index()</script>
+  
 </body>
 </html>

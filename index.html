@@ -91,20 +91,15 @@
     }
 
     /* Buttons */
-    .buttons {
-        text-align: center;
-        margin: 40px 0;
-    }
-    .buttons a {
-        display: inline-block;
-        padding: 15px 35px;
-        margin: 10px;
-        font-size: 18px;
-        border-radius: 10px;
-        color: white;
-        text-decoration: none;
-        transition: 0.3s;
-    }
+    .btn {
+		  border:none;
+		  border-radius:8px;
+		  padding:10px 18px;
+		  font-weight:600;
+		  cursor:pointer;
+		  transition:transform .15s, box-shadow .15s;
+		  color:#fff;
+		}
     .btn-download {
         background: linear-gradient(90deg, #FF4081, #FF9800);
         box-shadow: 0 6px 15px rgba(255, 64, 129, 0.4);
@@ -148,6 +143,7 @@
         font-size: 14px;
         color: #666;
     }
+		
 </style>
 </head>
 <body>
@@ -200,12 +196,15 @@
     <div class="download-section">
         <h3>🌟 Why Download the App?</h3>
         <p>The Android version includes premium unit support (Nol, Haat, Bigha, Acre, etc.), price calculator, offline history, and extra customization.</p>
-        <a href="https://github.com/SKR0411/LandCalculatorApp/releases/download/v1.0/land_calculator.apk" class="btn-download">Download Full App</a>
-        <a href="land_calculator_lite.html" class="btn-web">Try Web Version</a>
+        <button class="btn btn-download"><a href="https://github.com/SKR0411/LandCalculatorApp/releases/download/v1.0/land_calculator.apk" clss="btn-download">Download App</a></button>
+        <button class="btn btn-web"><a href="land_calculator_lite.html" clss="btn-web">Try Web Version</a></button>
     </div>
 </div>
 
 <footer>
+		<p style="font-size:13px;color:#777;margin-top:6px;">
+    	🔒 Advanced units like Nol, Haat, Acre, etc. are available in the full Android app.
+    </p>
     &copy; 2025 Land Calculator Lite. All rights reserved.
 </footer>
 
