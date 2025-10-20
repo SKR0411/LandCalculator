@@ -3,213 +3,144 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Area Calculator (Lite)</title>
+<title>Land Calculator App</title>
 <style>
     body {
-        font-family: Arial, sans-serif;
-        background: #FAFAFA;
-        padding: 20px;
-        max-width: 600px;
-        margin: auto;
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f0f4f8;
+        color: #333;
     }
-    h2 { margin-top: 20px; color: #000; }
-    .row { display: flex; justify-content: center; gap: 20px; margin-bottom: 15px; flex-wrap: wrap; }
-    .column { display: flex; flex-direction: column; gap: 10px; }
-    input, select, button { padding: 8px; font-size: 16px; width: 150px; }
-    button { width: 100%; background: #FF6200EE; color: #fff; border: none; cursor: pointer; padding: 10px; font-size: 16px; }
-    .result-box { margin-top: 15px; background: #EEEEEE; padding: 10px; font-size: 18px; color: #333; min-height: 50px; white-space: pre-line; }
-    .clear-btn { background: #FFEE0055; color: #fff; }
-    option.premium { color: red; font-weight: bold; }
-    small { color: red; }
+    header {
+        background: linear-gradient(90deg, #FF6200EE, #FF4081);
+        color: white;
+        padding: 40px 20px;
+        text-align: center;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+    header h1 {
+        margin: 0;
+        font-size: 36px;
+    }
+    header p {
+        font-size: 18px;
+        margin-top: 10px;
+    }
+    .container {
+        max-width: 1000px;
+        margin: 30px auto;
+        padding: 0 20px;
+    }
+    .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    .feature-card {
+        background: #fff;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        transition: transform 0.3s;
+    }
+    .feature-card:hover {
+        transform: translateY(-5px);
+    }
+    .feature-card img {
+        width: 60px;
+        margin-bottom: 15px;
+    }
+    .feature-card h3 {
+        margin: 10px 0;
+    }
+    .buttons {
+        text-align: center;
+        margin: 30px 0;
+    }
+    .buttons a {
+        display: inline-block;
+        padding: 15px 30px;
+        margin: 10px;
+        font-size: 18px;
+        border-radius: 10px;
+        color: white;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+    .btn-download {
+        background: linear-gradient(90deg, #FF6200EE, #FF4081);
+    }
+    .btn-download:hover {
+        background: linear-gradient(90deg, #FF4081, #FF6200EE);
+    }
+    .btn-web {
+        background: linear-gradient(90deg, #00BFA5, #1DE9B6);
+    }
+    .btn-web:hover {
+        background: linear-gradient(90deg, #1DE9B6, #00BFA5);
+    }
+    footer {
+        text-align: center;
+        padding: 20px;
+        font-size: 14px;
+        color: #666;
+    }
 </style>
 </head>
 <body>
 
-<h2>Length</h2>
-<div class="row">
-    <div class="column">
-        <input type="number" id="length1" value="0" step="0.01">
-        <select id="lengthUnit1"></select>
+<header>
+    <h1>Land Calculator Lite</h1>
+    <p>Calculate area and price of land easily, with multi-unit support and simple UI.</p>
+</header>
+
+<div class="container">
+    <h2 style="text-align:center;">Features</h2>
+    <div class="features">
+        <div class="feature-card">
+            <img src="https://img.icons8.com/ios-filled/100/000000/measure.png" alt="Units">
+            <h3>Multi Units Support</h3>
+            <p>Convert lengths and areas between meters, feet, inches, hectares, acres, and more.</p>
+        </div>
+        <div class="feature-card">
+            <img src="https://img.icons8.com/ios-filled/100/000000/calculator.png" alt="Calculator">
+            <h3>Area Calculator</h3>
+            <p>Calculate land area quickly using length and breadth, with optional multipliers.</p>
+        </div>
+        <div class="feature-card">
+            <img src="https://img.icons8.com/ios-filled/100/000000/money.png" alt="Price">
+            <h3>Price Estimation</h3>
+            <p>Compute total land price using price per unit and multipliers for bulk calculations.</p>
+        </div>
+        <div class="feature-card">
+            <img src="https://img.icons8.com/ios-filled/100/000000/premium.png" alt="Premium">
+            <h3>Premium Units</h3>
+            <p>Unlock advanced units like Nol, Haat, Bigha, Kear, and more by downloading the app.</p>
+        </div>
+        <div class="feature-card">
+            <img src="https://img.icons8.com/ios-filled/100/000000/mobile-app.png" alt="Mobile">
+            <h3>Mobile Friendly</h3>
+            <p>Works smoothly on any smartphone or tablet for on-the-go calculations.</p>
+        </div>
+        <div class="feature-card">
+            <img src="https://img.icons8.com/ios-filled/100/000000/web.png" alt="Web">
+            <h3>Web & App</h3>
+            <p>Use it online directly or download the full app for all features unlocked.</p>
+        </div>
     </div>
-    <div class="column">
-        <input type="number" id="length2" value="0" step="0.01">
-        <select id="lengthUnit2"></select>
+
+    <div class="buttons">
+        <a href="https://play.google.com/store/apps/details?id=com.skr.landcalculator" class="btn-download">Download App</a>
+        <a href="calculator.html" class="btn-web">Use Web Version</a>
     </div>
 </div>
 
-<h2>Breadth</h2>
-<div class="row">
-    <div class="column">
-        <input type="number" id="breadth1" value="0" step="0.01">
-        <select id="breadthUnit1"></select>
-    </div>
-    <div class="column">
-        <input type="number" id="breadth2" value="0" step="0.01">
-        <select id="breadthUnit2"></select>
-    </div>
-</div>
+<footer>
+    &copy; 2025 Land Calculator Lite. All rights reserved.
+</footer>
 
-<div class="row">
-    <button id="calculateAreaBtn">Calculate Area</button>
-    <select id="areaUnit"></select>
-</div>
-<div class="result-box" id="areaResult"></div>
-
-<h2>Amount</h2>
-<div class="row">
-    <div class="column">
-        <label>Multiplier</label>
-        <input type="number" id="times" value="1" step="1">
-        <select id="multiplier"></select>
-        <small>Premium feature. Download app to unlock values >1.</small>
-    </div>
-    <div class="column">
-        <label>Enter Price</label>
-        <input type="number" id="price" value="0" step="0.01">
-        <select id="priceUnit"></select>
-    </div>
-</div>
-<div class="row">
-    <button id="calculateAmountBtn">Calculate Amount</button>
-</div>
-<div class="result-box" id="amountResult"></div>
-
-<div class="row">
-    <button class="clear-btn" id="clearBtn">Clear All</button>
-</div>
-
-<script>
-// Units
-const lengthUnits = [
-    {name: "Meter", premium: false},
-    {name: "Centimeter", premium: false},
-    {name: "Foot", premium: false},
-    {name: "Inch", premium: false},
-    {name: "Nol", premium: true},
-    {name: "Haat", premium: true}
-];
-
-const areaUnits = [
-    {name: "Square Meter", premium: false},
-    {name: "Square Centimeter", premium: false},
-    {name: "Square Foot", premium: false},
-    {name: "Square Inch", premium: false},
-    {name: "Hectare", premium: true},
-    {name: "Acre", premium: true},
-    {name: "Bigha", premium: true},
-    {name: "Kear", premium: true},
-    {name: "Josti", premium: true},
-    {name: "Raak", premium: true},
-    {name: "Fon", premium: true},
-    {name: "Kear_Josti_Raak_Fon", premium: true},
-    {name: "Kata", premium: true}
-];
-
-const multiplierValues = [
-    {name: "1", premium: false},
-    {name: "2", premium: true},
-    {name: "3", premium: true},
-    {name: "4", premium: true},
-    {name: "5", premium: true},
-    {name: "6", premium: true},
-    {name: "7", premium: true},
-    {name: "8", premium: true},
-    {name: "9", premium: true},
-    {name: "10", premium: true}
-];
-
-// Populate dropdowns with premium labels
-function populateDropdown(id, arr) {
-    const select = document.getElementById(id);
-    arr.forEach(item => {
-        let option = document.createElement("option");
-        option.value = item.name;
-        option.textContent = item.premium ? item.name + " (Premium)" : item.name;
-        if(item.premium) option.classList.add("premium");
-        select.appendChild(option);
-    });
-}
-
-// Fill dropdowns
-["lengthUnit1","lengthUnit2","breadthUnit1","breadthUnit2"].forEach(id => populateDropdown(id, lengthUnits));
-["areaUnit","priceUnit"].forEach(id => populateDropdown(id, areaUnits));
-populateDropdown("multiplier", multiplierValues);
-
-// Conversion function
-function convertToMeter(value, unit) {
-    switch(unit){
-        case "Meter": return value;
-        case "Centimeter": return value*0.01;
-        case "Foot": return value*0.3048;
-        case "Inch": return value*0.0254;
-        case "Nol": alert("Nol is Premium. Download app to unlock."); return value*3.6576;
-        case "Haat": alert("Haat is Premium. Download app to unlock."); return value*0.4572;
-        default: return value;
-    }
-}
-
-// Calculate area
-function calculateArea() {
-    const l1 = parseFloat(document.getElementById("length1").value) || 0;
-    const l2 = parseFloat(document.getElementById("length2").value) || 0;
-    const b1 = parseFloat(document.getElementById("breadth1").value) || 0;
-    const b2 = parseFloat(document.getElementById("breadth2").value) || 0;
-
-    const lu1 = document.getElementById("lengthUnit1").value;
-    const lu2 = document.getElementById("lengthUnit2").value;
-    const bu1 = document.getElementById("breadthUnit1").value;
-    const bu2 = document.getElementById("breadthUnit2").value;
-    const areaUnit = document.getElementById("areaUnit").value;
-
-    const length = convertToMeter(l1, lu1) + convertToMeter(l2, lu2);
-    const breadth = convertToMeter(b1, bu1) + convertToMeter(b2, bu2);
-
-    const areaSqMeter = length*breadth;
-
-    document.getElementById("areaResult").textContent = formatArea(areaSqMeter, areaUnit);
-    return areaSqMeter;
-}
-
-// Format area
-function formatArea(value, unit){
-    if(unit.includes("Premium")) { 
-        alert("This area unit is Premium. Download app to unlock."); 
-        return "Premium unit locked. Download app to unlock.";
-    }
-    switch(unit){
-        case "Square Meter": return value.toFixed(2)+" m²";
-        case "Square Centimeter": return (value*10000).toFixed(1)+" cm²";
-        case "Square Foot": return (value*10.7639).toFixed(2)+" ft²";
-        case "Square Inch": return (value*1550.0031).toFixed(1)+" In²";
-        default: return "Premium unit locked. Download app to unlock.";
-    }
-}
-
-// Calculate amount
-function calculateAmount() {
-    const times = parseFloat(document.getElementById("times").value) || 1;
-    const price = parseFloat(document.getElementById("price").value) || 0;
-    const priceUnit = document.getElementById("priceUnit").value;
-
-    if(times>1){ alert("Multiplier >1 is Premium. Download app to unlock."); }
-
-    const areaSqMeter = calculateArea();
-    const amount = areaSqMeter*times*price;
-    document.getElementById("amountResult").textContent = formatArea(areaSqMeter, priceUnit)+"\n"+amount.toFixed(2)+" Rupees";
-}
-
-// Clear all fields
-document.getElementById("clearBtn").onclick = function(){
-    ["length1","length2","breadth1","breadth2","times","price"].forEach(id=>{
-        document.getElementById(id).value = id=="times"?1:0;
-    });
-    document.getElementById("areaResult").textContent = "";
-    document.getElementById("amountResult").textContent = "";
-};
-
-// Buttons
-document.getElementById("calculateAreaBtn").onclick = calculateArea;
-document.getElementById("calculateAmountBtn").onclick = calculateAmount;
-</script>
 </body>
 </html>
